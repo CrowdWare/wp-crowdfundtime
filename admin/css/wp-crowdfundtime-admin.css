@@ -1,0 +1,198 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+
+/* Admin Dashboard Styles */
+.wp-crowdfundtime-admin-wrap {
+    margin: 20px 0;
+}
+
+.wp-crowdfundtime-admin-header {
+    margin-bottom: 20px;
+}
+
+.wp-crowdfundtime-admin-header h1 {
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.wp-crowdfundtime-admin-header .add-new-campaign {
+    margin-left: 15px;
+}
+
+/* Campaign Table Styles */
+.wp-crowdfundtime-campaigns-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.wp-crowdfundtime-campaigns-table th,
+.wp-crowdfundtime-campaigns-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.wp-crowdfundtime-campaigns-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+.wp-crowdfundtime-campaigns-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.wp-crowdfundtime-campaigns-table .actions {
+    text-align: right;
+}
+
+.wp-crowdfundtime-campaigns-table .actions a {
+    margin-left: 10px;
+    text-decoration: none;
+}
+
+/* Campaign Form Styles */
+.wp-crowdfundtime-campaign-form {
+    max-width: 800px;
+    margin-top: 20px;
+}
+
+.wp-crowdfundtime-campaign-form .form-field {
+    margin-bottom: 15px;
+}
+
+.wp-crowdfundtime-campaign-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.wp-crowdfundtime-campaign-form input[type="text"],
+.wp-crowdfundtime-campaign-form input[type="number"],
+.wp-crowdfundtime-campaign-form input[type="date"],
+.wp-crowdfundtime-campaign-form textarea,
+.wp-crowdfundtime-campaign-form select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.wp-crowdfundtime-campaign-form textarea {
+    height: 150px;
+}
+
+.wp-crowdfundtime-campaign-form .submit-button {
+    margin-top: 20px;
+}
+
+/* Settings Page Styles */
+.wp-crowdfundtime-settings-form {
+    max-width: 800px;
+    margin-top: 20px;
+}
+
+.wp-crowdfundtime-settings-form .form-field {
+    margin-bottom: 15px;
+}
+
+.wp-crowdfundtime-settings-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.wp-crowdfundtime-settings-form input[type="text"],
+.wp-crowdfundtime-settings-form input[type="number"],
+.wp-crowdfundtime-settings-form select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.wp-crowdfundtime-settings-form .submit-button {
+    margin-top: 20px;
+}
+
+/* Dashboard Widget Styles */
+.wp-crowdfundtime-dashboard-widget {
+    padding: 10px;
+}
+
+.wp-crowdfundtime-dashboard-widget .stats-item {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.wp-crowdfundtime-dashboard-widget .stats-item:last-child {
+    border-bottom: none;
+}
+
+.wp-crowdfundtime-dashboard-widget .stats-label {
+    font-weight: bold;
+}
+
+.wp-crowdfundtime-dashboard-widget .stats-value {
+    float: right;
+}
+
+/* Progress Bar Styles */
+.wp-crowdfundtime-progress-container {
+    margin: 15px 0;
+}
+
+.wp-crowdfundtime-progress-bar {
+    height: 20px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.wp-crowdfundtime-progress-fill {
+    height: 100%;
+    background-color: #0073aa;
+    transition: width 0.5s ease-in-out;
+}
+
+.wp-crowdfundtime-progress-fill.hours-progress {
+    background-color: #0073aa;
+}
+
+.wp-crowdfundtime-progress-fill.money-progress {
+    background-color: #46b450;
+}
+
+.wp-crowdfundtime-progress-text {
+    font-size: 12px;
+    color: #666;
+}
+
+/* Notification Styles */
+.wp-crowdfundtime-notice {
+    padding: 10px 15px;
+    margin: 15px 0;
+    border-radius: 4px;
+}
+
+.wp-crowdfundtime-notice.success {
+    background-color: #dff0d8;
+    border: 1px solid #d6e9c6;
+    color: #3c763d;
+}
+
+.wp-crowdfundtime-notice.error {
+    background-color: #f2dede;
+    border: 1px solid #ebccd1;
+    color: #a94442;
+}
+
+.wp-crowdfundtime-notice.info {
+    background-color: #d9edf7;
+    border: 1px solid #bce8f1;
+    color: #31708f;
+}

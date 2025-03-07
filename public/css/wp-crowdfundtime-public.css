@@ -1,0 +1,233 @@
+/**
+ * All of the CSS for your public-facing functionality should be
+ * included in this file.
+ */
+
+/* Donation Form Styles */
+.wp-crowdfundtime-form-container {
+    max-width: 600px;
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.wp-crowdfundtime-form-container h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.wp-crowdfundtime-form {
+    margin-top: 15px;
+}
+
+.wp-crowdfundtime-form .form-field {
+    margin-bottom: 15px;
+}
+
+.wp-crowdfundtime-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.wp-crowdfundtime-form input[type="text"],
+.wp-crowdfundtime-form input[type="email"],
+.wp-crowdfundtime-form input[type="number"],
+.wp-crowdfundtime-form textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.wp-crowdfundtime-form textarea {
+    height: 100px;
+}
+
+.wp-crowdfundtime-form .checkbox-field {
+    margin-bottom: 10px;
+}
+
+.wp-crowdfundtime-form .checkbox-field label {
+    display: inline;
+    margin-left: 5px;
+    font-weight: normal;
+}
+
+.wp-crowdfundtime-form .submit-button {
+    background-color: #0073aa;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.wp-crowdfundtime-form .submit-button:hover {
+    background-color: #005f8b;
+}
+
+/* Donors List Styles */
+.wp-crowdfundtime-donors-container {
+    margin: 20px 0;
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.wp-crowdfundtime-donors-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.wp-crowdfundtime-donors-table th,
+.wp-crowdfundtime-donors-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.wp-crowdfundtime-donors-table th {
+    background-color: #f5f5f5;
+    position: sticky;
+    top: 0;
+}
+
+.wp-crowdfundtime-donors-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.wp-crowdfundtime-donors-table .social-icons {
+    text-align: center;
+}
+
+.wp-crowdfundtime-donors-table .social-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin: 0 2px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.wp-crowdfundtime-donors-table .facebook-icon {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="%233b5998" d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"/></svg>');
+}
+
+.wp-crowdfundtime-donors-table .x-icon {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%23000000" d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg>');
+}
+
+/* Progress Bar Styles */
+.wp-crowdfundtime-progress-container {
+    margin: 15px 0;
+}
+
+.wp-crowdfundtime-progress-bar {
+    height: 20px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.wp-crowdfundtime-progress-fill {
+    height: 100%;
+    background-color: #0073aa;
+    transition: width 0.5s ease-in-out;
+}
+
+.wp-crowdfundtime-progress-fill.hours-progress {
+    background-color: #0073aa;
+}
+
+.wp-crowdfundtime-progress-fill.money-progress {
+    background-color: #46b450;
+}
+
+.wp-crowdfundtime-progress-text {
+    font-size: 12px;
+    color: #666;
+}
+
+/* Social Sharing Styles */
+.wp-crowdfundtime-social-sharing {
+    margin: 20px 0;
+}
+
+.wp-crowdfundtime-social-sharing h4 {
+    margin-bottom: 10px;
+}
+
+.wp-crowdfundtime-social-sharing .social-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.wp-crowdfundtime-social-sharing .social-button {
+    display: inline-block;
+    padding: 8px 15px;
+    border-radius: 4px;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.wp-crowdfundtime-social-sharing .facebook-button {
+    background-color: #3b5998;
+}
+
+.wp-crowdfundtime-social-sharing .x-button {
+    background-color: #000000;
+}
+
+/* Notification Styles */
+.wp-crowdfundtime-notice {
+    padding: 10px 15px;
+    margin: 15px 0;
+    border-radius: 4px;
+}
+
+.wp-crowdfundtime-notice.success {
+    background-color: #dff0d8;
+    border: 1px solid #d6e9c6;
+    color: #3c763d;
+}
+
+.wp-crowdfundtime-notice.error {
+    background-color: #f2dede;
+    border: 1px solid #ebccd1;
+    color: #a94442;
+}
+
+.wp-crowdfundtime-notice.info {
+    background-color: #d9edf7;
+    border: 1px solid #bce8f1;
+    color: #31708f;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 600px) {
+    .wp-crowdfundtime-form-container {
+        padding: 15px;
+    }
+    
+    .wp-crowdfundtime-donors-table th,
+    .wp-crowdfundtime-donors-table td {
+        padding: 8px 5px;
+        font-size: 14px;
+    }
+    
+    .wp-crowdfundtime-donors-table .social-icons {
+        display: flex;
+        justify-content: center;
+    }
+}
