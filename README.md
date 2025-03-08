@@ -22,6 +22,11 @@ WP CrowdFundTime allows you to create crowdfunding campaigns where supporters ca
 1. Upload the `wp-crowdfundtime` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Go to 'CrowdFundTime' in your admin menu to create your first campaign
+4. The addon stripe_payments has to be installed manually.
+5. In order to activate stripe payments we have to enable this option manually because of a bug in our addon.
+'''sql
+INSERT INTO fds9_options (option_name, option_value, autoload) VALUES ('wp_crowdfundtime_stripe_integration', '1', 'yes') 
+'''
 
 ## Usage
 
