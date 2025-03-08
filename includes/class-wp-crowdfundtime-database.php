@@ -219,10 +219,51 @@ class WP_CrowdFundTime_Database {
         
         return (int) $wpdb->get_var(
             $wpdb->prepare(
-                "SELECT SUM(hours) FROM {$this->donations_table} WHERE campaign_id = %d",
+                "SELECT SUM(hours) FROM {$this->donations_table} WHERE campaign_id = %d AND donation_type = 'time'",
                 $campaign_id
             )
         );
+    }
+    
+    /**
+     * Get total Minutos donated for a campaign.
+     *
+     * @since    1.0.0
+     * @param    int      $campaign_id    The campaign ID.
+     * @param    bool     $only_received  Whether to only count received Minutos.
+     * @return   int                      The total Minutos donated.
+     */
+    public function get_total_minutos($campaign_id, $only_received = false) {
+        global $wpdb;
+        
+        $where = "campaign_id = %d AND donation_type = 'minutos'";
+        $params = array($campaign_id);
+        
+        if ($only_received) {
+            $where .= " AND minutos_received = 1";
+        }
+        
+        return (int) $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT SUM(minutos) FROM {$this->donations_table} WHERE $where",
+                $params
+            )
+        );
+    }
+    
+    /**
+     * Get monetary value of Minutos donated for a campaign.
+     *
+     * @since    1.0.0
+     * @param    int      $campaign_id    The campaign ID.
+     * @param    bool     $only_received  Whether to only count received Minutos.
+     * @return   float                    The monetary value of Minutos donated.
+     */
+    public function get_minutos_monetary_value($campaign_id, $only_received = false) {
+        $total_minutos = $this->get_total_minutos($campaign_id, $only_received);
+        
+        // Convert Minutos to monetary value (2 Minutos = 1 Euro)
+        return $total_minutos / 2;
     }
 
     /**
@@ -334,11 +375,20 @@ class WP_CrowdFundTime_Database {
                 'total_donors' => 0,
                 'facebook_posts' => 0,
                 'x_posts' => 0,
+                'total_minutos' => 0,
+                'total_minutos_received' => 0,
+                'minutos_monetary_value' => 0,
             );
         }
         
         $total_hours = $this->get_total_hours($campaign_id);
         $total_amount = $this->get_total_monetary_donations($campaign_id);
+        $total_minutos = $this->get_total_minutos($campaign_id, false);
+        $total_minutos_received = $this->get_total_minutos($campaign_id, true);
+        $minutos_monetary_value = $this->get_minutos_monetary_value($campaign_id, false);
+        
+        // Add Minutos monetary value to total amount
+        $total_amount += $minutos_monetary_value;
         
         $total_donors = $wpdb->get_var(
             $wpdb->prepare(
@@ -374,6 +424,9 @@ class WP_CrowdFundTime_Database {
             'total_donors' => $total_donors,
             'facebook_posts' => $facebook_posts,
             'x_posts' => $x_posts,
+            'total_minutos' => $total_minutos,
+            'total_minutos_received' => $total_minutos_received,
+            'minutos_monetary_value' => $minutos_monetary_value,
         );
     }
 }

@@ -48,8 +48,18 @@ class WP_CrowdFundTime_Donation {
      * @return   int|WP_Error           The donation ID on success, WP_Error on failure.
      */
     public function process_donation($form_data) {
-        // Validate required fields
-        $required_fields = array('campaign_id', 'name', 'email', 'hours');
+        // Determine donation type
+        $donation_type = isset($form_data['donation_type']) ? sanitize_text_field($form_data['donation_type']) : 'time';
+        
+        // Validate required fields based on donation type
+        $required_fields = array('campaign_id', 'name', 'email');
+        
+        if ($donation_type === 'time') {
+            $required_fields[] = 'hours';
+        } elseif ($donation_type === 'minutos') {
+            $required_fields[] = 'minutos';
+        }
+        
         foreach ($required_fields as $field) {
             if (empty($form_data[$field])) {
                 return new WP_Error(
@@ -59,11 +69,16 @@ class WP_CrowdFundTime_Donation {
             }
         }
         
-        // Validate hours (minimum 1)
-        if ((int) $form_data['hours'] < 1) {
+        // Validate hours or minutos (minimum 1)
+        if ($donation_type === 'time' && (int) $form_data['hours'] < 1) {
             return new WP_Error(
                 'invalid_hours',
                 __('Hours must be at least 1', 'wp-crowdfundtime')
+            );
+        } elseif ($donation_type === 'minutos' && (int) $form_data['minutos'] < 1) {
+            return new WP_Error(
+                'invalid_minutos',
+                __('Minutos must be at least 1', 'wp-crowdfundtime')
             );
         }
         
@@ -83,8 +98,17 @@ class WP_CrowdFundTime_Donation {
             'facebook_post' => isset($form_data['facebook_post']) ? 1 : 0,
             'x_post' => isset($form_data['x_post']) ? 1 : 0,
             'other_support' => isset($form_data['other_support']) ? sanitize_textarea_field($form_data['other_support']) : '',
-            'hours' => (int) $form_data['hours'],
+            'donation_type' => $donation_type,
         );
+        
+        // Add hours or minutos based on donation type
+        if ($donation_type === 'time') {
+            $donation_data['hours'] = (int) $form_data['hours'];
+            $donation_data['minutos'] = 0;
+        } elseif ($donation_type === 'minutos') {
+            $donation_data['minutos'] = (int) $form_data['minutos'];
+            $donation_data['hours'] = 0;
+        }
         
         // Create the donation
         $donation_id = $this->db->create_donation($donation_data);
@@ -115,9 +139,10 @@ class WP_CrowdFundTime_Donation {
      *
      * @since    1.0.0
      * @param    int      $campaign_id    The campaign ID.
+     * @param    string   $type           The type of form to display ('time' or 'minutos').
      * @return   string                   The donation form HTML.
      */
-    public function generate_donation_form($campaign_id) {
+    public function generate_donation_form($campaign_id, $type = 'time') {
         // Get the campaign
         $campaign = $this->db->get_campaign($campaign_id);
         if (!$campaign) {
@@ -127,13 +152,76 @@ class WP_CrowdFundTime_Donation {
         // Start output buffering
         ob_start();
         
-        // Include the form template
-        include WP_CROWDFUNDTIME_PLUGIN_DIR . 'templates/form-template.php';
+        // Include the appropriate form template based on type
+        if ($type === 'minutos') {
+            include WP_CROWDFUNDTIME_PLUGIN_DIR . 'templates/minutos-form-template.php';
+        } else {
+            include WP_CROWDFUNDTIME_PLUGIN_DIR . 'templates/form-template.php';
+        }
         
         // Return the buffered content
         return ob_get_clean();
     }
 
+    /**
+     * Get Minutos donations for a campaign.
+     *
+     * @since    1.0.0
+     * @param    int      $campaign_id    The campaign ID.
+     * @return   array                    The Minutos donations.
+     */
+    public function get_minutos_donations_by_campaign($campaign_id) {
+        global $wpdb;
+        $donations_table = $wpdb->prefix . 'crowdfundtime_donations';
+        
+        return $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT * FROM {$donations_table} WHERE campaign_id = %d AND donation_type = 'minutos' ORDER BY created_at DESC",
+                $campaign_id
+            )
+        );
+    }
+    
+    /**
+     * Get time donations for a campaign.
+     *
+     * @since    1.0.0
+     * @param    int      $campaign_id    The campaign ID.
+     * @return   array                    The time donations.
+     */
+    public function get_time_donations_by_campaign($campaign_id) {
+        global $wpdb;
+        $donations_table = $wpdb->prefix . 'crowdfundtime_donations';
+        
+        return $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT * FROM {$donations_table} WHERE campaign_id = %d AND donation_type = 'time' ORDER BY created_at DESC",
+                $campaign_id
+            )
+        );
+    }
+    
+    /**
+     * Mark a Minutos donation as received.
+     *
+     * @since    1.0.0
+     * @param    int      $donation_id    The donation ID.
+     * @return   bool                     True on success, false on failure.
+     */
+    public function mark_minutos_as_received($donation_id) {
+        global $wpdb;
+        $donations_table = $wpdb->prefix . 'crowdfundtime_donations';
+        
+        return $wpdb->update(
+            $donations_table,
+            array(
+                'minutos_received' => 1,
+                'minutos_received_date' => current_time('mysql')
+            ),
+            array('donation_id' => $donation_id)
+        ) !== false;
+    }
+    
     /**
      * Generate the HTML for the donors list.
      *
@@ -168,6 +256,15 @@ class WP_CrowdFundTime_Donation {
             
             // Include the money donors template
             include WP_CROWDFUNDTIME_PLUGIN_DIR . 'templates/money-donors-template.php';
+        }
+        
+        // Display Minutos donations if requested
+        if ($type === 'minutos' || $type === 'both' || $type === 'time_minutos') {
+            // Get the Minutos donations
+            $minutos_donations = $this->get_minutos_donations_by_campaign($campaign_id);
+            
+            // Include the Minutos donors template
+            include WP_CROWDFUNDTIME_PLUGIN_DIR . 'templates/minutos-donors-template.php';
         }
         
         // Return the buffered content

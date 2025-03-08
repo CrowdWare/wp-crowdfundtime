@@ -127,6 +127,7 @@ class WP_CrowdFundTime {
         add_action('wp_ajax_wp_crowdfundtime_update_campaign', array($this->admin, 'ajax_update_campaign'));
         add_action('wp_ajax_wp_crowdfundtime_delete_campaign', array($this->admin, 'ajax_delete_campaign'));
         add_action('wp_ajax_wp_crowdfundtime_export_donors', array($this->admin, 'ajax_export_donors'));
+        add_action('wp_ajax_wp_crowdfundtime_mark_minutos_received', array($this->admin, 'ajax_mark_minutos_received'));
     }
 
     /**

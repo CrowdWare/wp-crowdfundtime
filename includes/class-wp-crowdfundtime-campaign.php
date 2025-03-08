@@ -137,23 +137,67 @@ class WP_CrowdFundTime_Campaign {
     }
 
     /**
+     * Get Minutos statistics for a campaign.
+     *
+     * @since    1.0.0
+     * @param    int      $campaign_id    The campaign ID.
+     * @return   array                    The Minutos statistics.
+     */
+    public function get_minutos_stats($campaign_id) {
+        $campaign = $this->db->get_campaign($campaign_id);
+        if (!$campaign) {
+            return array(
+                'total_minutos' => 0,
+                'total_minutos_received' => 0,
+                'minutos_monetary_value' => 0,
+                'minutos_received_monetary_value' => 0,
+                'goal_amount' => 0,
+                'minutos_percentage' => 0,
+            );
+        }
+        
+        $total_minutos = $this->db->get_total_minutos($campaign_id, false);
+        $total_minutos_received = $this->db->get_total_minutos($campaign_id, true);
+        $minutos_monetary_value = $this->db->get_minutos_monetary_value($campaign_id, false);
+        $minutos_received_monetary_value = $this->db->get_minutos_monetary_value($campaign_id, true);
+        
+        $minutos_percentage = $campaign->goal_amount > 0 ? ($minutos_monetary_value / $campaign->goal_amount) * 100 : 0;
+        
+        return array(
+            'total_minutos' => $total_minutos,
+            'total_minutos_received' => $total_minutos_received,
+            'minutos_monetary_value' => $minutos_monetary_value,
+            'minutos_received_monetary_value' => $minutos_received_monetary_value,
+            'goal_amount' => $campaign->goal_amount,
+            'minutos_percentage' => min(100, $minutos_percentage),
+        );
+    }
+    /**
      * Format the progress display for a campaign.
      *
      * @since    1.0.0
      * @param    int      $campaign_id    The campaign ID.
-     * @param    string   $type           The type of progress to display ('hours' or 'money').
+     * @param    string   $type           The type of progress to display ('hours', 'money', or 'minutos').
      * @return   string                   The formatted progress display.
      */
     public function format_progress_display($campaign_id, $type = 'hours') {
-        $stats = $this->get_donation_stats($campaign_id);
-        
         if ($type === 'hours') {
+            $stats = $this->get_donation_stats($campaign_id);
             return sprintf(
                 '%d von %d Stunden',
                 $stats['total_hours'],
                 $stats['goal_hours']
             );
+        } elseif ($type === 'minutos') {
+            $stats = $this->get_minutos_stats($campaign_id);
+            return sprintf(
+                '%d Minutos (%.2f,- €) von %.2f,- €',
+                $stats['total_minutos'],
+                $stats['minutos_monetary_value'],
+                $stats['goal_amount']
+            );
         } else {
+            $stats = $this->get_donation_stats($campaign_id);
             return sprintf(
                 '%.2f,- € von %.2f,- €',
                 $stats['total_amount'],
@@ -167,21 +211,20 @@ class WP_CrowdFundTime_Campaign {
      *
      * @since    1.0.0
      * @param    int      $campaign_id    The campaign ID.
-     * @param    string   $type           The type of progress to display ('hours' or 'money').
+     * @param    string   $type           The type of progress to display ('hours', 'money', or 'minutos').
      * @return   string                   The progress bar HTML.
      */
     public function generate_progress_bar($campaign_id, $type = 'hours') {
-        $stats = $this->get_donation_stats($campaign_id);
-        
-        $percentage = $type === 'hours' ? $stats['hours_percentage'] : $stats['amount_percentage'];
-        $class = $type === 'hours' ? 'hours-progress' : 'money-progress';
-        
-        $html = '<div class="wp-crowdfundtime-progress-container">';
-        $html .= '<div class="wp-crowdfundtime-progress-bar ' . esc_attr($class) . '">';
-        $html .= '<div class="wp-crowdfundtime-progress-fill" style="width: ' . esc_attr($percentage) . '%"></div>';
-        $html .= '</div>';
-        
         if ($type === 'hours') {
+            $stats = $this->get_donation_stats($campaign_id);
+            $percentage = $stats['hours_percentage'];
+            $class = 'hours-progress';
+            
+            $html = '<div class="wp-crowdfundtime-progress-container">';
+            $html .= '<div class="wp-crowdfundtime-progress-bar ' . esc_attr($class) . '">';
+            $html .= '<div class="wp-crowdfundtime-progress-fill" style="width: ' . esc_attr($percentage) . '%"></div>';
+            $html .= '</div>';
+            
             $html .= '<div class="wp-crowdfundtime-progress-text">';
             $html .= esc_html(sprintf(
                 '%d von %d Stunden (%.1f%%)',
@@ -190,7 +233,43 @@ class WP_CrowdFundTime_Campaign {
                 $percentage
             ));
             $html .= '</div>';
+            
+            $html .= '</div>';
+            
+            return $html;
+        } elseif ($type === 'minutos') {
+            $stats = $this->get_minutos_stats($campaign_id);
+            $percentage = $stats['minutos_percentage'];
+            $class = 'minutos-progress';
+            
+            $html = '<div class="wp-crowdfundtime-progress-container">';
+            $html .= '<div class="wp-crowdfundtime-progress-bar ' . esc_attr($class) . '">';
+            $html .= '<div class="wp-crowdfundtime-progress-fill" style="width: ' . esc_attr($percentage) . '%"></div>';
+            $html .= '</div>';
+            
+            $html .= '<div class="wp-crowdfundtime-progress-text">';
+            $html .= esc_html(sprintf(
+                '%d Minutos (%.2f,- €) von %.2f,- € (%.1f%%)',
+                $stats['total_minutos'],
+                $stats['minutos_monetary_value'],
+                $stats['goal_amount'],
+                $percentage
+            ));
+            $html .= '</div>';
+            
+            $html .= '</div>';
+            
+            return $html;
         } else {
+            $stats = $this->get_donation_stats($campaign_id);
+            $percentage = $stats['amount_percentage'];
+            $class = 'money-progress';
+            
+            $html = '<div class="wp-crowdfundtime-progress-container">';
+            $html .= '<div class="wp-crowdfundtime-progress-bar ' . esc_attr($class) . '">';
+            $html .= '<div class="wp-crowdfundtime-progress-fill" style="width: ' . esc_attr($percentage) . '%"></div>';
+            $html .= '</div>';
+            
             $html .= '<div class="wp-crowdfundtime-progress-text">';
             $html .= esc_html(sprintf(
                 '%.2f,- € von %.2f,- € (%.1f%%)',
@@ -199,10 +278,10 @@ class WP_CrowdFundTime_Campaign {
                 $percentage
             ));
             $html .= '</div>';
+            
+            $html .= '</div>';
+            
+            return $html;
         }
-        
-        $html .= '</div>';
-        
-        return $html;
     }
 }

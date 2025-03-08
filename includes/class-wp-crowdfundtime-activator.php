@@ -60,6 +60,12 @@ class WP_CrowdFundTime_Activator {
             x_post tinyint(1) NOT NULL DEFAULT 0,
             other_support text,
             hours int(11) NOT NULL DEFAULT 1,
+            
+            minutos int(11) DEFAULT 0,
+            minutos_received tinyint(1) NOT NULL DEFAULT 0,
+            minutos_received_date datetime DEFAULT NULL,
+            donation_type varchar(20) NOT NULL DEFAULT 'time',
+            
             created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY  (donation_id),
             KEY campaign_id (campaign_id)

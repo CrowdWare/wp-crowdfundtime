@@ -66,6 +66,24 @@ The donation form includes:
 
 You can customize the plugin's appearance by overriding the CSS styles in your theme.
 
+## Integration with Minutos
+
+WP CrowdFundTime supports [Minutos](https://minuto.org/de) as a complementary currency. Minutos are time-based vouchers that can be donated to campaigns.
+
+### Using Minutos
+
+1. Use the shortcode `[crowdfundtime_form id=X type=minutos]` to display a Minutos donation form
+2. Donors can pledge Minutos through the form and then send the physical Minutos by mail
+3. Campaign administrators can mark Minutos as received in the admin area
+4. The plugin automatically converts Minutos to monetary value (2 Minutos = 1 Euro)
+
+### Displaying Minutos Donations
+
+Use these shortcodes to display Minutos donations:
+
+- `[crowdfundtime_donors id=X type=minutos]` - Displays only Minutos donors
+- `[crowdfundtime_progress id=X type=minutos display=bar]` - Displays the Minutos progress bar
+
 ## Integration with Stripe
 
 WP CrowdFundTime integrates with the Stripe Payments plugin to display monetary donations alongside time donations. This allows you to track both types of contributions in one place.
@@ -83,7 +101,8 @@ Use these enhanced shortcodes to display monetary donations:
 
 - `[crowdfundtime_donors id=X type=time]` - Displays only time donors
 - `[crowdfundtime_donors id=X type=money]` - Displays only money donors
-- `[crowdfundtime_donors id=X type=both]` - Displays both time and money donors
+- `[crowdfundtime_donors id=X type=minutos]` - Displays only Minutos donors
+- `[crowdfundtime_donors id=X type=both]` - Displays all types of donors
 - `[crowdfundtime_progress id=X type=money display=bar]` - Displays the money progress bar
 
 The plugin will automatically calculate the total amount donated through the associated Stripe products and display it in the progress bar and statistics.

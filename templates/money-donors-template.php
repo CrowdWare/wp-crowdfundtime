@@ -14,48 +14,38 @@ if (!defined('WPINC')) {
     die;
 }
 
-// Get the campaign and stripe orders
+// Get the campaign and donations
 if (!isset($campaign) || !$campaign || !isset($stripe_orders)) {
     return;
 }
 ?>
 
-<div class="wp-crowdfundtime-money-donors-container" data-campaign-id="<?php echo esc_attr($campaign->campaign_id); ?>">
+<div class="wp-crowdfundtime-donors-container" data-campaign-id="<?php echo esc_attr($campaign->campaign_id); ?>">
     <h3><?php echo esc_html__('Money Donors', 'wp-crowdfundtime'); ?></h3>
     
     <?php if (empty($stripe_orders)) : ?>
         <p><?php echo esc_html__('No money donations yet. Be the first to donate!', 'wp-crowdfundtime'); ?></p>
     <?php else : ?>
-        <table class="wp-crowdfundtime-donors-table wp-crowdfundtime-money-donors-table">
+        <table class="wp-crowdfundtime-donors-table money-donors-table">
             <thead>
                 <tr>
                     <th><?php echo esc_html__('Name', 'wp-crowdfundtime'); ?></th>
                     <th><?php echo esc_html__('Amount', 'wp-crowdfundtime'); ?></th>
-                    <th><?php echo esc_html__('Product', 'wp-crowdfundtime'); ?></th>
                     <th><?php echo esc_html__('Date', 'wp-crowdfundtime'); ?></th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($stripe_orders as $order) : 
                     $order_data = $order['order_data'];
-                    $is_test = isset($order_data['is_live']) && $order_data['is_live'] == 0;
+                    $name = isset($order_data['customer_name']) ? $order_data['customer_name'] : __('Anonymous', 'wp-crowdfundtime');
+                    $amount = isset($order_data['paid_amount']) ? floatval($order_data['paid_amount']) : 0;
+                    $currency = isset($order_data['currency']) ? strtoupper($order_data['currency']) : 'EUR';
+                    $date = isset($order['created_at']) ? $order['created_at'] : time();
                 ?>
-                    <tr<?php echo $is_test ? ' class="test-mode-order"' : ''; ?>>
-                        <td>
-                            <?php echo esc_html($order_data['customer_name']); ?>
-                            <?php if ($is_test) : ?>
-                                <span class="test-mode-badge" title="<?php echo esc_attr__('Test Mode', 'wp-crowdfundtime'); ?>">[<?php echo esc_html__('Test', 'wp-crowdfundtime'); ?>]</span>
-                            <?php endif; ?>
-                        </td>
-                        <td><?php 
-                            if (class_exists('AcceptStripePayments')) {
-                                echo esc_html(AcceptStripePayments::formatted_price($order_data['paid_amount'], $order_data['currency_code']));
-                            } else {
-                                echo esc_html(number_format($order_data['paid_amount'], 2) . ' ' . $order_data['currency_code']);
-                            }
-                        ?></td>
-                        <td><?php echo esc_html($order_data['item_name']); ?></td>
-                        <td><?php echo esc_html(date_i18n(get_option('date_format'), $order['created_at'])); ?></td>
+                    <tr>
+                        <td><?php echo esc_html($name); ?></td>
+                        <td><?php echo esc_html(number_format($amount, 2) . ' ' . $currency); ?></td>
+                        <td><?php echo esc_html(date_i18n(get_option('date_format'), $date)); ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

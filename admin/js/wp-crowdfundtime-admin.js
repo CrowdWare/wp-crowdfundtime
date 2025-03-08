@@ -204,6 +204,65 @@
 			});
 		});
 		
+		// Mark Minutos as received
+		
+		$(document).on('click', '.wp-crowdfundtime-mark-minutos-received', function(e) {
+			e.preventDefault();
+			
+			var donationId = $(this).data('donation-id');
+			var button = $(this);
+			var row = button.closest('tr');
+			
+			// Confirm action
+			if (confirm('Are you sure you want to mark these Minutos as received?')) {
+				// Disable button
+				button.prop('disabled', true).text('Processing...');
+				
+				// AJAX request to mark Minutos as received
+				$.ajax({
+					url: wp_crowdfundtime_admin.ajax_url,
+					type: 'POST',
+					data: {
+						action: 'wp_crowdfundtime_mark_minutos_received',
+						donation_id: donationId,
+						nonce: wp_crowdfundtime_admin.nonce
+					},
+					success: function(response) {
+						if (response.success) {
+							// Show success message
+							$('.wp-crowdfundtime-admin-notices').html(
+								'<div class="wp-crowdfundtime-notice success">' + response.data.message + '</div>'
+							);
+							
+							// Update the row to show received status
+							row.addClass('minutos-received').removeClass('minutos-pending');
+							row.find('.minutos-status').html('Received').addClass('received').removeClass('pending');
+							
+							// Remove the button
+							button.remove();
+						} else {
+							// Show error message
+							$('.wp-crowdfundtime-admin-notices').html(
+								'<div class="wp-crowdfundtime-notice error">' + response.data.message + '</div>'
+							);
+							
+							// Re-enable button
+							button.prop('disabled', false).text('Mark as Received');
+						}
+					},
+					error: function() {
+						// Show error message
+						$('.wp-crowdfundtime-admin-notices').html(
+							'<div class="wp-crowdfundtime-notice error">An error occurred. Please try again.</div>'
+						);
+						
+						// Re-enable button
+						button.prop('disabled', false).text('Mark as Received');
+					}
+				});
+			}
+		});
+		
 		// Date picker initialization (if jQuery UI datepicker is available)
 		if ($.datepicker) {
 			$('.wp-crowdfundtime-datepicker').datepicker({
