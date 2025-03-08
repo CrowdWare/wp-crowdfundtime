@@ -62,6 +62,10 @@ class WP_CrowdFundTime_Campaign {
             $campaign_data['goal_amount'] = 0.00;
         }
         
+        if (!isset($campaign_data['goal_minutos'])) {
+            $campaign_data['goal_minutos'] = 0;
+        }
+        
         return $this->db->create_campaign($campaign_data);
     }
 
@@ -152,6 +156,7 @@ class WP_CrowdFundTime_Campaign {
                 'minutos_monetary_value' => 0,
                 'minutos_received_monetary_value' => 0,
                 'goal_amount' => 0,
+                'goal_minutos' => 0,
                 'minutos_percentage' => 0,
             );
         }
@@ -161,7 +166,13 @@ class WP_CrowdFundTime_Campaign {
         $minutos_monetary_value = $this->db->get_minutos_monetary_value($campaign_id, false);
         $minutos_received_monetary_value = $this->db->get_minutos_monetary_value($campaign_id, true);
         
-        $minutos_percentage = $campaign->goal_amount > 0 ? ($minutos_monetary_value / $campaign->goal_amount) * 100 : 0;
+        // Calculate percentage based on goal_minutos if available, otherwise use goal_amount
+        $minutos_percentage = 0;
+        if (isset($campaign->goal_minutos) && $campaign->goal_minutos > 0) {
+            $minutos_percentage = ($total_minutos / $campaign->goal_minutos) * 100;
+        } elseif ($campaign->goal_amount > 0) {
+            $minutos_percentage = ($minutos_monetary_value / $campaign->goal_amount) * 100;
+        }
         
         return array(
             'total_minutos' => $total_minutos,
@@ -169,6 +180,7 @@ class WP_CrowdFundTime_Campaign {
             'minutos_monetary_value' => $minutos_monetary_value,
             'minutos_received_monetary_value' => $minutos_received_monetary_value,
             'goal_amount' => $campaign->goal_amount,
+            'goal_minutos' => isset($campaign->goal_minutos) ? $campaign->goal_minutos : 0,
             'minutos_percentage' => min(100, $minutos_percentage),
         );
     }
@@ -190,12 +202,20 @@ class WP_CrowdFundTime_Campaign {
             );
         } elseif ($type === 'minutos') {
             $stats = $this->get_minutos_stats($campaign_id);
-            return sprintf(
-                '%d Minutos (%.2f,- €) von %.2f,- €',
-                $stats['total_minutos'],
-                $stats['minutos_monetary_value'],
-                $stats['goal_amount']
-            );
+            if ($stats['goal_minutos'] > 0) {
+                return sprintf(
+                    '%d Minutos von %d',
+                    $stats['total_minutos'],
+                    $stats['goal_minutos']
+                );
+            } else {
+                return sprintf(
+                    '%d Minutos (%.2f,- €) von %.2f,- €',
+                    $stats['total_minutos'],
+                    $stats['minutos_monetary_value'],
+                    $stats['goal_amount']
+                );
+            }
         } else {
             $stats = $this->get_donation_stats($campaign_id);
             return sprintf(
@@ -248,13 +268,24 @@ class WP_CrowdFundTime_Campaign {
             $html .= '</div>';
             
             $html .= '<div class="wp-crowdfundtime-progress-text">';
-            $html .= esc_html(sprintf(
-                '%d Minutos (%.2f,- €) von %.2f,- € (%.1f%%)',
-                $stats['total_minutos'],
-                $stats['minutos_monetary_value'],
-                $stats['goal_amount'],
-                $percentage
-            ));
+            
+            if ($stats['goal_minutos'] > 0) {
+                $html .= esc_html(sprintf(
+                    '%d Minutos von %d (%.1f%%)',
+                    $stats['total_minutos'],
+                    $stats['goal_minutos'],
+                    $percentage
+                ));
+            } else {
+                $html .= esc_html(sprintf(
+                    '%d Minutos (%.2f,- €) von %.2f,- € (%.1f%%)',
+                    $stats['total_minutos'],
+                    $stats['minutos_monetary_value'],
+                    $stats['goal_amount'],
+                    $percentage
+                ));
+            }
+            
             $html .= '</div>';
             
             $html .= '</div>';

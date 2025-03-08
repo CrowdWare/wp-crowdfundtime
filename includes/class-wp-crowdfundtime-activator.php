@@ -41,6 +41,7 @@ class WP_CrowdFundTime_Activator {
             description longtext,
             goal_hours int(11) NOT NULL DEFAULT 0,
             goal_amount decimal(10,2) NOT NULL DEFAULT 0.00,
+            goal_minutos int(11) NOT NULL DEFAULT 0,
             start_date datetime DEFAULT NULL,
             end_date datetime DEFAULT NULL,
             page_id bigint(20) DEFAULT NULL,

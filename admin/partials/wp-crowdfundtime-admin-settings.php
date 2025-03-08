@@ -18,6 +18,7 @@ if (!defined('WPINC')) {
 $stripe_integration = get_option('wp_crowdfundtime_stripe_integration', 0);
 $default_goal_hours = get_option('wp_crowdfundtime_default_goal_hours', 100);
 $default_goal_amount = get_option('wp_crowdfundtime_default_goal_amount', 1000.00);
+$default_goal_minutos = get_option('wp_crowdfundtime_default_goal_minutos', 3000);
 $social_sharing = get_option('wp_crowdfundtime_social_sharing', 1);
 $export_format = get_option('wp_crowdfundtime_export_format', 'pdf');
 ?>
@@ -44,6 +45,12 @@ $export_format = get_option('wp_crowdfundtime_export_format', 'pdf');
             <label for="default_goal_amount"><?php echo esc_html__('Default Money Goal (€)', 'wp-crowdfundtime'); ?></label>
             <input type="number" name="default_goal_amount" id="default_goal_amount" min="0" step="0.01" value="<?php echo esc_attr($default_goal_amount); ?>">
             <p class="description"><?php echo esc_html__('Default money goal for new campaigns.', 'wp-crowdfundtime'); ?></p>
+        </div>
+        
+        <div class="form-field">
+            <label for="default_goal_minutos"><?php echo esc_html__('Default Minutos Goal', 'wp-crowdfundtime'); ?></label>
+            <input type="number" name="default_goal_minutos" id="default_goal_minutos" min="0" value="<?php echo esc_attr($default_goal_minutos); ?>">
+            <p class="description"><?php echo esc_html__('Default Minutos goal for new campaigns.', 'wp-crowdfundtime'); ?></p>
         </div>
         
         <div class="form-field">

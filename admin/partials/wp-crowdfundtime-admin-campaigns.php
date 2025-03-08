@@ -33,6 +33,8 @@ if (!defined('WPINC')) {
                     <th><?php echo esc_html__('Title', 'wp-crowdfundtime'); ?></th>
                     <th><?php echo esc_html__('Hours Goal', 'wp-crowdfundtime'); ?></th>
                     <th><?php echo esc_html__('Hours Donated', 'wp-crowdfundtime'); ?></th>
+                    <th><?php echo esc_html__('Minutos Goal', 'wp-crowdfundtime'); ?></th>
+                    <th><?php echo esc_html__('Minutos Donated', 'wp-crowdfundtime'); ?></th>
                     <th><?php echo esc_html__('Money Goal', 'wp-crowdfundtime'); ?></th>
                     <th><?php echo esc_html__('Money Donated', 'wp-crowdfundtime'); ?></th>
                     <th><?php echo esc_html__('Page', 'wp-crowdfundtime'); ?></th>
@@ -50,6 +52,14 @@ if (!defined('WPINC')) {
                         <td><?php echo esc_html($campaign->title); ?></td>
                         <td><?php echo esc_html($campaign->goal_hours); ?></td>
                         <td><?php echo esc_html($stats['total_hours']); ?> (<?php echo esc_html(round($stats['hours_percentage'], 1)); ?>%)</td>
+                        <td><?php echo esc_html(isset($campaign->goal_minutos) ? $campaign->goal_minutos : 0); ?></td>
+                        <td><?php 
+                            $minutos_stats = $this->campaign->get_minutos_stats($campaign->campaign_id);
+                            echo esc_html($minutos_stats['total_minutos']); 
+                            if (isset($campaign->goal_minutos) && $campaign->goal_minutos > 0) {
+                                echo ' (' . esc_html(round($minutos_stats['minutos_percentage'], 1)) . '%)';
+                            }
+                        ?></td>
                         <td><?php echo esc_html(number_format($campaign->goal_amount, 2)); ?> €</td>
                         <td><?php echo esc_html(number_format($stats['total_amount'], 2)); ?> € (<?php echo esc_html(round($stats['amount_percentage'], 1)); ?>%)</td>
                         <td><?php echo esc_html($page_title); ?></td>
@@ -71,7 +81,7 @@ if (!defined('WPINC')) {
         <ul>
             <li><code>[crowdfundtime_form id=X]</code> - <?php echo esc_html__('Displays the donation form for the campaign with ID X.', 'wp-crowdfundtime'); ?></li>
             <li><code>[crowdfundtime_donors id=X]</code> - <?php echo esc_html__('Displays the donors list for the campaign with ID X.', 'wp-crowdfundtime'); ?></li>
-            <li><code>[crowdfundtime_progress id=X type=hours|money display=bar|text]</code> - <?php echo esc_html__('Displays the progress bar or text for the campaign with ID X. The type parameter can be "hours" or "money". The display parameter can be "bar" or "text".', 'wp-crowdfundtime'); ?></li>
+            <li><code>[crowdfundtime_progress id=X type=hours|money|minutos display=bar|text]</code> - <?php echo esc_html__('Displays the progress bar or text for the campaign with ID X. The type parameter can be "hours", "money", or "minutos". The display parameter can be "bar" or "text".', 'wp-crowdfundtime'); ?></li>
         </ul>
     </div>
 </div>
