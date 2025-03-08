@@ -21,7 +21,7 @@ if (!isset($campaign) || !$campaign) {
 ?>
 
 <div class="wp-crowdfundtime-form-container">
-    <h3><?php echo esc_html__('Donate Minutos', 'wp-crowdfundtime'); ?></h3>
+    <h3><?php echo esc_html__('Spende Minutos', 'wp-crowdfundtime'); ?></h3>
     
     <div class="wp-crowdfundtime-notice-container">
         <?php
@@ -55,7 +55,8 @@ if (!isset($campaign) || !$campaign) {
         <div class="form-field">
             <label for="minutos"><?php echo esc_html__('Minutos', 'wp-crowdfundtime'); ?> *</label>
             <input type="number" name="minutos" id="minutos" min="15" value="15" required>
-            <p class="description"><?php echo esc_html__('Please send your Minutos by mail after submitting this form.', 'wp-crowdfundtime'); ?></p>
+            <!--p class="description"><?php echo esc_html__('Please send your Minutos by mail after submitting this form.', 'wp-crowdfundtime'); ?></p-->
+            <p class="description">Bitte sende Deine <a target="_blank" href="https://minuto.org/">Minutos</a> per Post nach der Übermittelung dieses Formulares.</p>
         </div>
         
         <div class="form-field">

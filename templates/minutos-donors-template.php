@@ -21,7 +21,7 @@ if (!isset($campaign) || !$campaign || !isset($minutos_donations)) {
 ?>
 
 <div class="wp-crowdfundtime-donors-container" data-campaign-id="<?php echo esc_attr($campaign->campaign_id); ?>">
-    <h3><?php echo esc_html__('Minutos Donors', 'wp-crowdfundtime'); ?></h3>
+    <h3><?php echo esc_html__('Minutos-Spenden', 'wp-crowdfundtime'); ?></h3>
     
     <?php if (empty($minutos_donations)) : ?>
         <p><?php echo esc_html__('No Minutos donations yet. Be the first to donate!', 'wp-crowdfundtime'); ?></p>

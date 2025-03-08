@@ -21,7 +21,7 @@ if (!isset($campaign) || !$campaign) {
 ?>
 
 <div class="wp-crowdfundtime-form-container">
-    <h3><?php echo esc_html__('Donate Your Time', 'wp-crowdfundtime'); ?></h3>
+    <h3><?php echo esc_html__('Spende Deine Zeit', 'wp-crowdfundtime'); ?></h3>
     
     <div class="wp-crowdfundtime-notice-container">
         <?php
@@ -51,7 +51,7 @@ if (!isset($campaign) || !$campaign) {
             <label for="email"><?php echo esc_html__('Email', 'wp-crowdfundtime'); ?> *</label>
             <input type="email" name="email" id="email" required>
         </div>
-        
+        <p>Ich biete wie folgt an...</p>
         <div class="form-field checkbox-field">
             <input type="checkbox" name="facebook_post" id="facebook_post" value="1">
             <label for="facebook_post"><?php echo esc_html__('Facebook Posts', 'wp-crowdfundtime'); ?></label>
