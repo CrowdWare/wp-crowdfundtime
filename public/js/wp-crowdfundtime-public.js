@@ -19,9 +19,11 @@
 			
 			// Validate form
 			var isValid = true;
+			var donation_type = form.find('input[name="donation_type"]').val();
 			var name = form.find('input[name="name"]').val();
 			var email = form.find('input[name="email"]').val();
 			var hours = parseInt(form.find('input[name="hours"]').val(), 10);
+			var minutos = parseInt(form.find('input[name="minutos"]').val(), 10)
 			
 			if (!name) {
 				isValid = false;
@@ -37,11 +39,20 @@
 				form.find('input[name="email"]').removeClass('error');
 			}
 			
-			if (isNaN(hours) || hours < 1) {
-				isValid = false;
-				form.find('input[name="hours"]').addClass('error');
-			} else {
-				form.find('input[name="hours"]').removeClass('error');
+			if (donation_type == "hours") {
+				if (isNaN(hours) || hours < 1) {
+					isValid = false;
+					form.find('input[name="hours"]').addClass('error');
+				} else {
+					form.find('input[name="hours"]').removeClass('error');
+				}
+			} else if (donation_type == "minutos") {
+				if (isNaN(minutos) || minutos < 1) {
+					isValid = false;
+					form.find('input[name="minutos"]').addClass('error');
+				} else {
+					form.find('input[name="minutos"]').removeClass('error');
+				}
 			}
 			
 			if (!isValid) {

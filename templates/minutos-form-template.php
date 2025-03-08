@@ -52,24 +52,9 @@ if (!isset($campaign) || !$campaign) {
             <input type="email" name="email" id="email" required>
         </div>
         
-        <div class="form-field checkbox-field">
-            <input type="checkbox" name="facebook_post" id="facebook_post" value="1">
-            <label for="facebook_post"><?php echo esc_html__('Facebook Posts', 'wp-crowdfundtime'); ?></label>
-        </div>
-        
-        <div class="form-field checkbox-field">
-            <input type="checkbox" name="x_post" id="x_post" value="1">
-            <label for="x_post"><?php echo esc_html__('X Post', 'wp-crowdfundtime'); ?></label>
-        </div>
-        
-        <div class="form-field">
-            <label for="other_support"><?php echo esc_html__('Sonstiges', 'wp-crowdfundtime'); ?></label>
-            <textarea name="other_support" id="other_support" rows="4"></textarea>
-        </div>
-        
         <div class="form-field">
             <label for="minutos"><?php echo esc_html__('Minutos', 'wp-crowdfundtime'); ?> *</label>
-            <input type="number" name="minutos" id="minutos" min="1" value="1" required>
+            <input type="number" name="minutos" id="minutos" min="15" value="15" required>
             <p class="description"><?php echo esc_html__('Please send your Minutos by mail after submitting this form.', 'wp-crowdfundtime'); ?></p>
         </div>
         
@@ -78,11 +63,11 @@ if (!isset($campaign) || !$campaign) {
         </div>
     </form>
     
-    <div class="wp-crowdfundtime-social-sharing">
+    <!--div class="wp-crowdfundtime-social-sharing">
         <h4><?php echo esc_html__('Share This Campaign', 'wp-crowdfundtime'); ?></h4>
         <div class="social-buttons">
             <a href="#" class="social-button facebook-button" data-url="<?php echo esc_url(get_permalink()); ?>" data-title="<?php echo esc_attr($campaign->title); ?>"><?php echo esc_html__('Share on Facebook', 'wp-crowdfundtime'); ?></a>
             <a href="#" class="social-button x-button" data-url="<?php echo esc_url(get_permalink()); ?>" data-title="<?php echo esc_attr($campaign->title); ?>"><?php echo esc_html__('Share on X', 'wp-crowdfundtime'); ?></a>
         </div>
-    </div>
+    </div-->
 </div>

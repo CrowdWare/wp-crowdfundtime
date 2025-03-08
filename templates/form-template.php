@@ -40,6 +40,7 @@ if (!isset($campaign) || !$campaign) {
     <form class="wp-crowdfundtime-form" method="post" action="">
         <?php wp_nonce_field('wp_crowdfundtime_donation_form', 'wp_crowdfundtime_nonce'); ?>
         <input type="hidden" name="campaign_id" value="<?php echo esc_attr($campaign->campaign_id); ?>">
+        <input type="hidden" name="donation_type" value="hours">
         
         <div class="form-field">
             <label for="name"><?php echo esc_html__('Name', 'wp-crowdfundtime'); ?> *</label>
@@ -76,11 +77,11 @@ if (!isset($campaign) || !$campaign) {
         </div>
     </form>
     
-    <div class="wp-crowdfundtime-social-sharing">
+    <!--div class="wp-crowdfundtime-social-sharing">
         <h4><?php echo esc_html__('Share This Campaign', 'wp-crowdfundtime'); ?></h4>
         <div class="social-buttons">
             <a href="#" class="social-button facebook-button" data-url="<?php echo esc_url(get_permalink()); ?>" data-title="<?php echo esc_attr($campaign->title); ?>"><?php echo esc_html__('Share on Facebook', 'wp-crowdfundtime'); ?></a>
             <a href="#" class="social-button x-button" data-url="<?php echo esc_url(get_permalink()); ?>" data-title="<?php echo esc_attr($campaign->title); ?>"><?php echo esc_html__('Share on X', 'wp-crowdfundtime'); ?></a>
         </div>
-    </div>
+    </div-->
 </div>
