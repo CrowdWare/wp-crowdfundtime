@@ -1,0 +1,68 @@
+[03/07/2025 02:41:09 PM] - handle_create_pi() -  Product ID: 201, Captcha Type: , Txn Counter: 0, IP: 2003:d1:571d:9d00:9d58:8742:5366:95e7
+[03/07/2025 02:41:09 PM] - Page load signature check done!
+[03/07/2025 02:41:09 PM] - Request usage count is valid for this IP addresss. IP: 2003:d1:571d:9d00:9d58:8742:5366:95e7, Request Count: 1
+[03/07/2025 02:41:09 PM] - Pre-API Submission validation successful. Expected: 100, Submitted: 100
+[03/07/2025 02:42:44 PM] - handle_confirm_pi() -  Product ID: 201, Captcha Type: , Txn Counter: 0, IP: 2003:d1:571d:9d00:9d58:8742:5366:95e7
+[03/07/2025 02:42:44 PM] - Page load signature check done!
+[03/07/2025 02:42:44 PM] - Request usage count is valid for this IP addresss. IP: 2003:d1:571d:9d00:9d58:8742:5366:95e7, Request Count: 2
+[03/07/2025 02:42:46 PM] - Payment processing started.
+[03/07/2025 02:42:46 PM] - Got product ID: 201
+[03/07/2025 02:42:46 PM] - Firing asp_ng_process_ipn_product_item_override filter.
+[03/07/2025 02:42:46 PM] - Firing asp_ng_process_ipn_payment_data_item_override filter.
+[03/07/2025 02:42:46 PM] - Using the Stripe API version 2022-11-15 or later for Payment Intents object. Need to retrieve the charge object separately.
+[03/07/2025 02:42:47 PM] - The transaction ID of this notification is: ch_3R025KLrBLHuJoe91W1ZGHgG
+[03/07/2025 02:42:47 PM] - Constructing checkout result and order data.
+[03/07/2025 02:42:47 PM] - Logged-in user's Username: CrowdW_Admin
+[03/07/2025 02:42:47 PM] - Firing asp_ng_payment_completed filter.
+[03/07/2025 02:42:47 PM] - Firing asp_ng_payment_completed_update_pi filter.
+[03/07/2025 02:42:47 PM] - Firing asp_stripe_payment_completed action.
+[03/07/2025 02:42:47 PM] - Payment has been processed successfully.
+[03/07/2025 02:42:47 PM] - Redirecting to results page "https://crowdware.info/stripe-checkout-result/"
+
+[03/07/2025 02:53:01 PM] - handle_create_pi() -  Product ID: 236, Captcha Type: , Txn Counter: 1, IP: 2003:d1:571d:9d00:9d58:8742:5366:95e7
+[03/07/2025 02:53:01 PM] - Page load signature check done!
+[03/07/2025 02:53:01 PM] - Request usage count is valid for this IP addresss. IP: 2003:d1:571d:9d00:9d58:8742:5366:95e7, Request Count: 3
+[03/07/2025 02:53:01 PM] - Pre-API Submission validation successful. Expected: 197.65, Submitted: 197.65
+[03/07/2025 02:53:03 PM] - handle_confirm_pi() -  Product ID: 236, Captcha Type: , Txn Counter: 1, IP: 2003:d1:571d:9d00:9d58:8742:5366:95e7
+[03/07/2025 02:53:03 PM] - Page load signature check done!
+[03/07/2025 02:53:03 PM] - Request usage count is valid for this IP addresss. IP: 2003:d1:571d:9d00:9d58:8742:5366:95e7, Request Count: 4
+[03/07/2025 02:53:04 PM] - Payment processing started.
+[03/07/2025 02:53:04 PM] - Got product ID: 236
+[03/07/2025 02:53:04 PM] - Firing asp_ng_process_ipn_product_item_override filter.
+[03/07/2025 02:53:04 PM] - Firing asp_ng_process_ipn_payment_data_item_override filter.
+[03/07/2025 02:53:05 PM] - Using the Stripe API version 2022-11-15 or later for Payment Intents object. Need to retrieve the charge object separately.
+[03/07/2025 02:53:05 PM] - The transaction ID of this notification is: ch_3R02GnLrBLHuJoe917Nl4xKb
+[03/07/2025 02:53:05 PM] - Coupon code provided: GET33OFF
+[03/07/2025 02:53:05 PM] - Coupon is valid for the product.
+[03/07/2025 02:53:05 PM] - Constructing checkout result and order data.
+[03/07/2025 02:53:05 PM] - Logged-in user's Username: CrowdW_Admin
+[03/07/2025 02:53:05 PM] - Firing asp_ng_payment_completed filter.
+[03/07/2025 02:53:05 PM] - Firing asp_ng_handle_metadata filter.
+[03/07/2025 02:53:05 PM] - Updating payment metadata.
+[03/07/2025 02:53:05 PM] - Firing asp_ng_payment_completed_update_pi filter.
+[03/07/2025 02:53:05 PM] - Updating payment intent data.
+[03/07/2025 02:53:05 PM] - Firing asp_stripe_payment_completed action.
+[03/07/2025 02:53:06 PM] - Payment has been processed successfully.
+[03/07/2025 02:53:06 PM] - Redirecting to results page "https://crowdware.info/stripe-checkout-result/"
+
+[03/07/2025 04:06:35 PM] - handle_create_pi() -  Product ID: 253, Captcha Type: , Txn Counter: 2, IP: 2003:d1:571d:9d00:9d58:8742:5366:95e7
+[03/07/2025 04:06:35 PM] - Page load signature check done!
+[03/07/2025 04:06:35 PM] - Request usage count is valid for this IP addresss. IP: 2003:d1:571d:9d00:9d58:8742:5366:95e7, Request Count: 5
+[03/07/2025 04:06:35 PM] - This is a donation type product. API pre-submission amount validation is not required.
+[03/07/2025 04:06:37 PM] - handle_confirm_pi() -  Product ID: 253, Captcha Type: , Txn Counter: 2, IP: 2003:d1:571d:9d00:9d58:8742:5366:95e7
+[03/07/2025 04:06:37 PM] - Page load signature check done!
+[03/07/2025 04:06:37 PM] - Request usage count is valid for this IP addresss. IP: 2003:d1:571d:9d00:9d58:8742:5366:95e7, Request Count: 6
+[03/07/2025 04:06:39 PM] - Payment processing started.
+[03/07/2025 04:06:39 PM] - Got product ID: 253
+[03/07/2025 04:06:39 PM] - Firing asp_ng_process_ipn_product_item_override filter.
+[03/07/2025 04:06:39 PM] - Firing asp_ng_process_ipn_payment_data_item_override filter.
+[03/07/2025 04:06:39 PM] - Using the Stripe API version 2022-11-15 or later for Payment Intents object. Need to retrieve the charge object separately.
+[03/07/2025 04:06:40 PM] - The transaction ID of this notification is: ch_3R03Q0LrBLHuJoe90ndUy6nN
+[03/07/2025 04:06:40 PM] - Constructing checkout result and order data.
+[03/07/2025 04:06:40 PM] - Logged-in user's Username: CrowdW_Admin
+[03/07/2025 04:06:40 PM] - Firing asp_ng_payment_completed filter.
+[03/07/2025 04:06:40 PM] - Firing asp_ng_payment_completed_update_pi filter.
+[03/07/2025 04:06:40 PM] - Firing asp_stripe_payment_completed action.
+[03/07/2025 04:06:40 PM] - Payment has been processed successfully.
+[03/07/2025 04:06:40 PM] - Redirecting to results page "https://crowdware.info/stripe-checkout-result/"
+

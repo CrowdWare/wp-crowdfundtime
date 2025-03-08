@@ -139,26 +139,131 @@ class WP_CrowdFundTime_Donation {
      *
      * @since    1.0.0
      * @param    int      $campaign_id    The campaign ID.
+     * @param    string   $type           The type of donations to display ('time', 'money', or 'both').
      * @return   string                   The donors list HTML.
      */
-    public function generate_donors_list($campaign_id) {
+    public function generate_donors_list($campaign_id, $type = 'time') {
         // Get the campaign
         $campaign = $this->db->get_campaign($campaign_id);
         if (!$campaign) {
             return '<p>' . __('Campaign not found.', 'wp-crowdfundtime') . '</p>';
         }
         
-        // Get the donations
-        $donations = $this->db->get_donations_by_campaign($campaign_id);
-        
         // Start output buffering
         ob_start();
         
-        // Include the donors template
-        include WP_CROWDFUNDTIME_PLUGIN_DIR . 'templates/donors-template.php';
+        // Display time donations if requested
+        if ($type === 'time' || $type === 'both') {
+            // Get the time donations
+            $donations = $this->db->get_donations_by_campaign($campaign_id);
+            
+            // Include the time donors template
+            include WP_CROWDFUNDTIME_PLUGIN_DIR . 'templates/donors-template.php';
+        }
+        
+        // Display money donations if requested
+        if ($type === 'money' || $type === 'both') {
+            // Get the money donations (Stripe orders)
+            $stripe_orders = $this->get_stripe_orders_by_campaign($campaign_id);
+            
+            // Include the money donors template
+            include WP_CROWDFUNDTIME_PLUGIN_DIR . 'templates/money-donors-template.php';
+        }
         
         // Return the buffered content
         return ob_get_clean();
+    }
+    
+    /**
+     * Get Stripe orders for a campaign.
+     *
+     * @since    1.0.0
+     * @param    int      $campaign_id    The campaign ID.
+     * @param    bool     $include_test   Whether to include test mode orders.
+     * @return   array                    The Stripe orders.
+     */
+    public function get_stripe_orders_by_campaign($campaign_id, $include_test = true) {
+        // Check if Stripe Payments plugin is active
+        if (!post_type_exists('stripe_order')) {
+            return array();
+        }
+        
+        // Get the campaign
+        $campaign = $this->db->get_campaign($campaign_id);
+        if (!$campaign) {
+            return array();
+        }
+        
+        // Get the associated Stripe product IDs
+        $stripe_product_ids = get_post_meta($campaign_id, 'stripe_product_ids', true);
+        if (empty($stripe_product_ids)) {
+            return array();
+        }
+        
+        // Convert to array if it's a string
+        if (!is_array($stripe_product_ids)) {
+            $stripe_product_ids = explode(',', $stripe_product_ids);
+        }
+        
+        // Initialize orders array
+        $orders = array();
+        
+        // Query Stripe orders (custom post type: stripe_order)
+        $args = array(
+            'post_type' => 'stripe_order',
+            'post_status' => 'publish',
+            'posts_per_page' => -1,
+            'orderby' => 'date',
+            'order' => 'DESC',
+        );
+        
+        $stripe_orders = get_posts($args);
+        
+        foreach ($stripe_orders as $order) {
+            // Get order data
+            $order_data = get_post_meta($order->ID, 'order_data', true);
+            
+            if (!$order_data || empty($order_data['product_id'])) {
+                continue;
+            }
+            
+            // Check if this order is for one of our associated products
+            if (!in_array($order_data['product_id'], $stripe_product_ids)) {
+                continue;
+            }
+            
+            // Check if we should include test mode orders
+            if (!$include_test && isset($order_data['is_live']) && $order_data['is_live'] == 0) {
+                continue;
+            }
+            
+            // Check if the order is paid
+            $order_status = get_post_meta($order->ID, 'asp_order_status', true);
+            $is_paid = false;
+            
+            if (empty($order_status)) {
+                // Legacy orders might not have a status, check the charge data
+                if (isset($order_data['charge']->paid) && $order_data['charge']->paid && 
+                    isset($order_data['charge']->captured) && $order_data['charge']->captured) {
+                    // Order is paid
+                    $is_paid = true;
+                }
+            } else if ($order_status === 'paid') {
+                // Order has a status and it's paid
+                $is_paid = true;
+            }
+            
+            if ($is_paid) {
+                // Add to orders array
+                $orders[] = array(
+                    'order_id' => $order->ID,
+                    'order_data' => $order_data,
+                    'created_at' => strtotime($order->post_date),
+                );
+            }
+        }
+        
+        return $orders;
     }
 
     /**

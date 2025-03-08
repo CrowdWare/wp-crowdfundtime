@@ -3,7 +3,7 @@
  * Plugin Name: WP CrowdFundTime
  * Plugin URI: https://example.com/wp-crowdfundtime
  * Description: A WordPress plugin for time-based crowdfunding campaigns where users can donate their time instead of money.
- * Version: 1.0.0
+ * Version: 1.2.0
  * Author: Your Name
  * Author URI: https://example.com
  * Text Domain: wp-crowdfundtime
@@ -18,10 +18,20 @@ if (!defined('WPINC')) {
 }
 
 // Define plugin constants
-define('WP_CROWDFUNDTIME_VERSION', '1.0.0');
+define('WP_CROWDFUNDTIME_VERSION', '1.2.0');
 define('WP_CROWDFUNDTIME_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WP_CROWDFUNDTIME_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('WP_CROWDFUNDTIME_PLUGIN_BASENAME', plugin_basename(__FILE__));
+
+// Check if Stripe Payments plugin is active and include necessary files
+if (!class_exists('ASPMain') && file_exists(WP_CROWDFUNDTIME_PLUGIN_DIR . 'stripe-payments/accept-stripe-payments.php')) {
+    // Define ASPMain class and products_slug if not already defined
+    if (!class_exists('ASPMain')) {
+        class ASPMain {
+            public static $products_slug = 'asp-products';
+        }
+    }
+}
 
 /**
  * The code that runs during plugin activation.

@@ -232,6 +232,8 @@ class WP_CrowdFundTime_Public {
         $atts = shortcode_atts(
             array(
                 'id' => 0,
+                'type' => 'time', // 'time', 'money', or 'both'
+                'include_test' => 'yes', // 'yes' or 'no'
             ),
             $atts,
             'crowdfundtime_donors'
@@ -243,7 +245,12 @@ class WP_CrowdFundTime_Public {
             return '<p>' . __('Invalid campaign ID.', 'wp-crowdfundtime') . '</p>';
         }
         
-        return $this->donation->generate_donors_list($campaign_id);
+        $type = $atts['type'];
+        if (!in_array($type, array('time', 'money', 'both'))) {
+            $type = 'time';
+        }
+        
+        return $this->donation->generate_donors_list($campaign_id, $type);
     }
 
     /**

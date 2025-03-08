@@ -227,32 +227,83 @@ class WP_CrowdFundTime_Database {
 
     /**
      * Get total monetary donations for a campaign from Stripe.
-     * This is a placeholder function that would need to be integrated with Stripe.
      *
      * @since    1.0.0
      * @param    int      $campaign_id    The campaign ID.
+     * @param    bool     $include_test   Whether to include test mode orders.
      * @return   float                    The total monetary donations.
      */
-    public function get_total_monetary_donations($campaign_id) {
-        // This is a placeholder function
-        // In a real implementation, this would query the Stripe payment data
-        // For now, we'll return a dummy value
-        return 0.00;
-        
-        // Example implementation with Stripe integration:
-        /*
+    public function get_total_monetary_donations($campaign_id, $include_test = true) {
         global $wpdb;
         
-        // Assuming there's a table that stores Stripe payment information
-        $stripe_payments_table = $wpdb->prefix . 'stripe_payments';
+        // Check if Stripe Payments plugin is active
+        if (!post_type_exists('stripe_order')) {
+            return 0.00;
+        }
         
-        return (float) $wpdb->get_var(
-            $wpdb->prepare(
-                "SELECT SUM(amount) FROM {$stripe_payments_table} WHERE campaign_id = %d AND status = 'completed'",
-                $campaign_id
-            )
+        // Get the campaign to check for associated product IDs
+        $campaign = $this->get_campaign($campaign_id);
+        if (!$campaign) {
+            return 0.00;
+        }
+        
+        // Get the associated Stripe product IDs
+        $stripe_product_ids = get_post_meta($campaign_id, 'stripe_product_ids', true);
+        if (empty($stripe_product_ids)) {
+            return 0.00;
+        }
+        
+        // Convert to array if it's a string
+        if (!is_array($stripe_product_ids)) {
+            $stripe_product_ids = explode(',', $stripe_product_ids);
+        }
+        
+        // Initialize total amount
+        $total_amount = 0.00;
+        
+        // Query Stripe orders (custom post type: stripe_order)
+        $args = array(
+            'post_type' => 'stripe_order',
+            'post_status' => 'publish',
+            'posts_per_page' => -1,
         );
-        */
+        
+        $orders = get_posts($args);
+        
+        foreach ($orders as $order) {
+            // Get order data
+            $order_data = get_post_meta($order->ID, 'order_data', true);
+            
+            if (!$order_data || empty($order_data['product_id'])) {
+                continue;
+            }
+            
+            // Check if this order is for one of our associated products
+            if (!in_array($order_data['product_id'], $stripe_product_ids)) {
+                continue;
+            }
+            
+            // Check if we should include test mode orders
+            if (!$include_test && isset($order_data['is_live']) && $order_data['is_live'] == 0) {
+                continue;
+            }
+            
+            // Check if the order is paid
+            $order_status = get_post_meta($order->ID, 'asp_order_status', true);
+            if (empty($order_status)) {
+                // Legacy orders might not have a status, check the charge data
+                if (isset($order_data['charge']->paid) && $order_data['charge']->paid && 
+                    isset($order_data['charge']->captured) && $order_data['charge']->captured) {
+                    // Order is paid
+                    $total_amount += floatval($order_data['paid_amount']);
+                }
+            } else if ($order_status === 'paid') {
+                // Order has a status and it's paid
+                $total_amount += floatval($order_data['paid_amount']);
+            }
+        }
+        
+        return $total_amount;
     }
 
     /**

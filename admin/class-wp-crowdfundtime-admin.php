@@ -212,6 +212,7 @@ class WP_CrowdFundTime_Admin {
         $start_date = isset($_POST['start_date']) ? sanitize_text_field($_POST['start_date']) : '';
         $end_date = isset($_POST['end_date']) ? sanitize_text_field($_POST['end_date']) : '';
         $page_id = isset($_POST['page_id']) ? intval($_POST['page_id']) : 0;
+        $stripe_product_ids = isset($_POST['stripe_product_ids']) ? $_POST['stripe_product_ids'] : array();
         
         // Validate required fields
         if (empty($title)) {
@@ -234,6 +235,11 @@ class WP_CrowdFundTime_Admin {
         
         if (!$campaign_id) {
             wp_send_json_error(array('message' => __('Failed to create campaign.', 'wp-crowdfundtime')));
+        }
+        
+        // Save Stripe product IDs
+        if (!empty($stripe_product_ids)) {
+            update_post_meta($campaign_id, 'stripe_product_ids', $stripe_product_ids);
         }
         
         wp_send_json_success(array(
@@ -293,6 +299,12 @@ class WP_CrowdFundTime_Admin {
         
         if (!$result) {
             wp_send_json_error(array('message' => __('Failed to update campaign.', 'wp-crowdfundtime')));
+        }
+        
+        // Save Stripe product IDs
+        if (isset($_POST['stripe_product_ids'])) {
+            $stripe_product_ids = $_POST['stripe_product_ids'];
+            update_post_meta($campaign_id, 'stripe_product_ids', $stripe_product_ids);
         }
         
         wp_send_json_success(array(

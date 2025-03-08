@@ -81,6 +81,56 @@ $pages = get_pages();
             <p class="description"><?php echo esc_html__('Select the page where this campaign will be displayed.', 'wp-crowdfundtime'); ?></p>
         </div>
         
+        <?php
+        // Get Stripe products
+        $stripe_products = array();
+        
+        // Check if ASPMain class exists
+        if (class_exists('ASPMain')) {
+            $args = array(
+                'post_type' => ASPMain::$products_slug,
+                'post_status' => 'publish',
+                'posts_per_page' => -1,
+                'orderby' => 'title',
+                'order' => 'ASC',
+            );
+            $products_query = new WP_Query($args);
+            if ($products_query->have_posts()) {
+                while ($products_query->have_posts()) {
+                    $products_query->the_post();
+                    $stripe_products[get_the_ID()] = get_the_title();
+                }
+                wp_reset_postdata();
+            }
+        }
+        
+        // Get selected Stripe product IDs
+        $selected_product_ids = array();
+        if ($is_edit) {
+            $selected_product_ids = get_post_meta($campaign_id, 'stripe_product_ids', true);
+            if (!empty($selected_product_ids) && !is_array($selected_product_ids)) {
+                $selected_product_ids = explode(',', $selected_product_ids);
+            }
+            if (empty($selected_product_ids)) {
+                $selected_product_ids = array();
+            }
+        }
+        ?>
+        
+        <div class="form-field">
+            <label for="stripe_product_ids"><?php echo esc_html__('Associated Stripe Products', 'wp-crowdfundtime'); ?></label>
+            <?php if (!empty($stripe_products)) : ?>
+                <select name="stripe_product_ids[]" id="stripe_product_ids" class="wp-crowdfundtime-product-select" multiple="multiple" style="min-height: 100px; width: 100%;">
+                    <?php foreach ($stripe_products as $product_id => $product_title) : ?>
+                        <option value="<?php echo esc_attr($product_id); ?>" <?php echo in_array($product_id, $selected_product_ids) ? 'selected="selected"' : ''; ?>><?php echo esc_html($product_title); ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <p class="description"><?php echo esc_html__('Select the Stripe products that are associated with this campaign. Hold Ctrl/Cmd to select multiple products.', 'wp-crowdfundtime'); ?></p>
+            <?php else : ?>
+                <p><?php echo esc_html__('No Stripe products found. Please create some products in the Stripe Payments plugin first.', 'wp-crowdfundtime'); ?></p>
+            <?php endif; ?>
+        </div>
+        
         <div class="form-field submit-button">
             <button type="submit" class="button button-primary">
                 <?php echo $is_edit ? esc_html__('Update Campaign', 'wp-crowdfundtime') : esc_html__('Create Campaign', 'wp-crowdfundtime'); ?>
@@ -94,7 +144,9 @@ $pages = get_pages();
             <p><?php echo esc_html__('Use the following shortcodes to display this campaign on your pages:', 'wp-crowdfundtime'); ?></p>
             <ul>
                 <li><code>[crowdfundtime_form id=<?php echo esc_html($campaign_id); ?>]</code> - <?php echo esc_html__('Displays the donation form.', 'wp-crowdfundtime'); ?></li>
-                <li><code>[crowdfundtime_donors id=<?php echo esc_html($campaign_id); ?>]</code> - <?php echo esc_html__('Displays the donors list.', 'wp-crowdfundtime'); ?></li>
+                <li><code>[crowdfundtime_donors id=<?php echo esc_html($campaign_id); ?> type=time]</code> - <?php echo esc_html__('Displays the time donors list.', 'wp-crowdfundtime'); ?></li>
+                <li><code>[crowdfundtime_donors id=<?php echo esc_html($campaign_id); ?> type=money]</code> - <?php echo esc_html__('Displays the money donors list.', 'wp-crowdfundtime'); ?></li>
+                <li><code>[crowdfundtime_donors id=<?php echo esc_html($campaign_id); ?> type=both]</code> - <?php echo esc_html__('Displays both time and money donors lists.', 'wp-crowdfundtime'); ?></li>
                 <li><code>[crowdfundtime_progress id=<?php echo esc_html($campaign_id); ?> type=hours display=bar]</code> - <?php echo esc_html__('Displays the hours progress bar.', 'wp-crowdfundtime'); ?></li>
                 <li><code>[crowdfundtime_progress id=<?php echo esc_html($campaign_id); ?> type=money display=bar]</code> - <?php echo esc_html__('Displays the money progress bar.', 'wp-crowdfundtime'); ?></li>
             </ul>
