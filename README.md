@@ -68,7 +68,25 @@ You can customize the plugin's appearance by overriding the CSS styles in your t
 
 ## Integration with Stripe
 
-If you're using the Stripe payment plugin for monetary donations, WP CrowdFundTime can display the total amount donated alongside time donations.
+WP CrowdFundTime integrates with the Stripe Payments plugin to display monetary donations alongside time donations. This allows you to track both types of contributions in one place.
+
+### Setting Up Stripe Integration
+
+1. Install and activate the [Stripe Payments](https://wordpress.org/plugins/stripe-payments/) plugin
+2. Create products in the Stripe Payments plugin that you want to associate with your campaigns
+3. Edit your campaign and select the associated Stripe products from the dropdown menu
+4. Any payments made through these Stripe products will now be counted towards your campaign's monetary goal
+
+### Displaying Money Donations
+
+Use these enhanced shortcodes to display monetary donations:
+
+- `[crowdfundtime_donors id=X type=time]` - Displays only time donors
+- `[crowdfundtime_donors id=X type=money]` - Displays only money donors
+- `[crowdfundtime_donors id=X type=both]` - Displays both time and money donors
+- `[crowdfundtime_progress id=X type=money display=bar]` - Displays the money progress bar
+
+The plugin will automatically calculate the total amount donated through the associated Stripe products and display it in the progress bar and statistics.
 
 ## Creating a ZIP File
 

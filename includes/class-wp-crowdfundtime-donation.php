@@ -183,6 +183,12 @@ class WP_CrowdFundTime_Donation {
      * @return   array                    The Stripe orders.
      */
     public function get_stripe_orders_by_campaign($campaign_id, $include_test = true) {
+        // Check if Stripe integration is enabled in settings
+        $stripe_integration = get_option('wp_crowdfundtime_stripe_integration', 0);
+        if (!$stripe_integration) {
+            return array();
+        }
+        
         // Check if Stripe Payments plugin is active
         if (!post_type_exists('stripe_order')) {
             return array();

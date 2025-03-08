@@ -236,6 +236,12 @@ class WP_CrowdFundTime_Database {
     public function get_total_monetary_donations($campaign_id, $include_test = true) {
         global $wpdb;
         
+        // Check if Stripe integration is enabled in settings
+        $stripe_integration = get_option('wp_crowdfundtime_stripe_integration', 0);
+        if (!$stripe_integration) {
+            return 0.00;
+        }
+        
         // Check if Stripe Payments plugin is active
         if (!post_type_exists('stripe_order')) {
             return 0.00;

@@ -250,6 +250,15 @@ class WP_CrowdFundTime_Public {
             $type = 'time';
         }
         
+        // Check if Stripe integration is enabled when requesting money donations
+        if (($type === 'money' || $type === 'both') && !get_option('wp_crowdfundtime_stripe_integration', 0)) {
+            if ($type === 'money') {
+                return '<p>' . __('Stripe integration is not enabled in the settings.', 'wp-crowdfundtime') . '</p>';
+            }
+            // If 'both' was requested but Stripe is disabled, fall back to just time donations
+            $type = 'time';
+        }
+        
         return $this->donation->generate_donors_list($campaign_id, $type);
     }
 
@@ -279,6 +288,11 @@ class WP_CrowdFundTime_Public {
         
         $type = $atts['type'] === 'money' ? 'money' : 'hours';
         $display = $atts['display'] === 'text' ? 'text' : 'bar';
+        
+        // Check if Stripe integration is enabled when requesting money progress
+        if ($type === 'money' && !get_option('wp_crowdfundtime_stripe_integration', 0)) {
+            return '<p>' . __('Stripe integration is not enabled in the settings.', 'wp-crowdfundtime') . '</p>';
+        }
         
         if ($display === 'text') {
             return $this->campaign->format_progress_display($campaign_id, $type);
