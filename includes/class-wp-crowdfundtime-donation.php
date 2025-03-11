@@ -49,12 +49,12 @@ class WP_CrowdFundTime_Donation {
      */
     public function process_donation($form_data) {
         // Determine donation type
-        $donation_type = isset($form_data['donation_type']) ? sanitize_text_field($form_data['donation_type']) : 'time';
+        $donation_type = isset($form_data['donation_type']) ? sanitize_text_field($form_data['donation_type']) : 'hours';
         
         // Validate required fields based on donation type
         $required_fields = array('campaign_id', 'name', 'email');
         
-        if ($donation_type === 'time') {
+        if ($donation_type === 'hours') {
             $required_fields[] = 'hours';
         } elseif ($donation_type === 'minutos') {
             $required_fields[] = 'minutos';
@@ -70,7 +70,7 @@ class WP_CrowdFundTime_Donation {
         }
         
         // Validate hours or minutos (minimum 1)
-        if ($donation_type === 'time' && (int) $form_data['hours'] < 1) {
+        if ($donation_type === 'hours' && (int) $form_data['hours'] < 1) {
             return new WP_Error(
                 'invalid_hours',
                 __('Hours must be at least 1', 'wp-crowdfundtime')
@@ -102,14 +102,14 @@ class WP_CrowdFundTime_Donation {
         );
         
         // Add hours or minutos based on donation type
-        if ($donation_type === 'time') {
+        if ($donation_type === 'hours') {
             $donation_data['hours'] = (int) $form_data['hours'];
             $donation_data['minutos'] = 0;
         } elseif ($donation_type === 'minutos') {
             $donation_data['minutos'] = (int) $form_data['minutos'];
             $donation_data['hours'] = 0;
         }
-        
+
         // Create the donation
         $donation_id = $this->db->create_donation($donation_data);
         
@@ -139,10 +139,10 @@ class WP_CrowdFundTime_Donation {
      *
      * @since    1.0.0
      * @param    int      $campaign_id    The campaign ID.
-     * @param    string   $type           The type of form to display ('time' or 'minutos').
+     * @param    string   $type           The type of form to display ('hours' or 'minutos').
      * @return   string                   The donation form HTML.
      */
-    public function generate_donation_form($campaign_id, $type = 'time') {
+    public function generate_donation_form($campaign_id, $type = 'hours') {
         // Get the campaign
         $campaign = $this->db->get_campaign($campaign_id);
         if (!$campaign) {
@@ -195,7 +195,7 @@ class WP_CrowdFundTime_Donation {
         
         return $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT * FROM {$donations_table} WHERE campaign_id = %d AND donation_type = 'time' ORDER BY created_at DESC",
+                "SELECT * FROM {$donations_table} WHERE campaign_id = %d AND donation_type = 'hours' ORDER BY created_at DESC",
                 $campaign_id
             )
         );
@@ -227,10 +227,10 @@ class WP_CrowdFundTime_Donation {
      *
      * @since    1.0.0
      * @param    int      $campaign_id    The campaign ID.
-     * @param    string   $type           The type of donations to display ('time', 'money', or 'both').
+     * @param    string   $type           The type of donations to display ('hours', 'money', or 'both').
      * @return   string                   The donors list HTML.
      */
-    public function generate_donors_list($campaign_id, $type = 'time') {
+    public function generate_donors_list($campaign_id, $type = 'hours') {
         // Get the campaign
         $campaign = $this->db->get_campaign($campaign_id);
         if (!$campaign) {
@@ -241,7 +241,7 @@ class WP_CrowdFundTime_Donation {
         ob_start();
         
         // Display time donations if requested
-        if ($type === 'time' || $type === 'both') {
+        if ($type === 'hours' || $type === 'both') {
             // Get the time donations
             $donations = $this->db->get_donations_by_campaign($campaign_id);
             

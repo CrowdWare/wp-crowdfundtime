@@ -104,7 +104,7 @@ WP CrowdFundTime integrates with the Stripe Payments plugin to display monetary 
 
 Use these enhanced shortcodes to display monetary donations:
 
-- `[crowdfundtime_donors id=X type=time]` - Displays only time donors
+- `[crowdfundtime_donors id=X type=hours]` - Displays only hours donors
 - `[crowdfundtime_donors id=X type=money]` - Displays only money donors
 - `[crowdfundtime_donors id=X type=minutos]` - Displays only Minutos donors
 - `[crowdfundtime_donors id=X type=both]` - Displays all types of donors

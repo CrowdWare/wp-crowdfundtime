@@ -123,7 +123,7 @@ class WP_CrowdFundTime_Public {
         $facebook_post = isset($_POST['facebook_post']) ? 1 : 0;
         $x_post = isset($_POST['x_post']) ? 1 : 0;
         $other_support = isset($_POST['other_support']) ? sanitize_textarea_field($_POST['other_support']) : '';
-        $donation_type = isset($_POST['donation_type']) ? sanitize_text_field($_POST['donation_type']) : 'time';
+        $donation_type = isset($_POST['donation_type']) ? sanitize_text_field($_POST['donation_type']) : 'hours';
         
         // Prepare form data
         $form_data = array(
@@ -137,7 +137,7 @@ class WP_CrowdFundTime_Public {
         );
         
         // Add hours or minutos based on donation type
-        if ($donation_type === 'time') {
+        if ($donation_type === 'hours') {
             $form_data['hours'] = isset($_POST['hours']) ? intval($_POST['hours']) : 0;
         } elseif ($donation_type === 'minutos') {
             $form_data['minutos'] = isset($_POST['minutos']) ? intval($_POST['minutos']) : 0;
@@ -177,7 +177,7 @@ class WP_CrowdFundTime_Public {
         $facebook_post = isset($_POST['facebook_post']) ? 1 : 0;
         $x_post = isset($_POST['x_post']) ? 1 : 0;
         $other_support = isset($_POST['other_support']) ? sanitize_textarea_field($_POST['other_support']) : '';
-        $donation_type = isset($_POST['donation_type']) ? sanitize_text_field($_POST['donation_type']) : 'time';
+        $donation_type = isset($_POST['donation_type']) ? sanitize_text_field($_POST['donation_type']) : 'hours';
         
         // Prepare form data
         $form_data = array(
@@ -191,7 +191,7 @@ class WP_CrowdFundTime_Public {
         );
         
         // Add hours or minutos based on donation type
-        if ($donation_type === 'time') {
+        if ($donation_type === 'hours') {
             $form_data['hours'] = isset($_POST['hours']) ? intval($_POST['hours']) : 0;
         } elseif ($donation_type === 'minutos') {
             $form_data['minutos'] = isset($_POST['minutos']) ? intval($_POST['minutos']) : 0;
@@ -252,7 +252,7 @@ class WP_CrowdFundTime_Public {
         $atts = shortcode_atts(
             array(
                 'id' => 0,
-                'type' => 'time', // 'time', 'money', 'minutos', or 'both'
+                'type' => 'hours', // 'hours', 'money', 'minutos', or 'both'
                 'include_test' => 'yes', // 'yes' or 'no'
             ),
             $atts,
@@ -266,8 +266,8 @@ class WP_CrowdFundTime_Public {
         }
         
         $type = $atts['type'];
-        if (!in_array($type, array('time', 'money', 'minutos', 'both'))) {
-            $type = 'time';
+        if (!in_array($type, array('hours', 'money', 'minutos', 'both'))) {
+            $type = 'hours';
         }
         
         // Check if Stripe integration is enabled when requesting money donations
@@ -276,7 +276,7 @@ class WP_CrowdFundTime_Public {
                 return '<p>' . __('Stripe integration is not enabled in the settings.', 'wp-crowdfundtime') . '</p>';
             }
             // If 'both' was requested but Stripe is disabled, fall back to just time and minutos donations
-            $type = ($type === 'both') ? 'time_minutos' : 'time';
+            $type = ($type === 'both') ? 'time_minutos' : 'hours';
         }
         
         return $this->donation->generate_donors_list($campaign_id, $type);
