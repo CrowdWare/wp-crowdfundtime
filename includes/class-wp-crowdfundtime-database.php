@@ -201,7 +201,7 @@ class WP_CrowdFundTime_Database {
         
         return $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT * FROM {$this->donations_table} WHERE campaign_id = %d AND donation_type = 'time' ORDER BY created_at DESC",
+                "SELECT * FROM {$this->donations_table} WHERE campaign_id = %d AND donation_type = 'hours' ORDER BY created_at DESC",
                 $campaign_id
             )
         );
@@ -219,7 +219,7 @@ class WP_CrowdFundTime_Database {
         
         return (int) $wpdb->get_var(
             $wpdb->prepare(
-                "SELECT SUM(hours) FROM {$this->donations_table} WHERE campaign_id = %d AND donation_type = 'time'",
+                "SELECT SUM(hours) FROM {$this->donations_table} WHERE campaign_id = %d AND donation_type = 'hours'",
                 $campaign_id
             )
         );
