@@ -385,10 +385,10 @@ class WP_CrowdFundTime_Database {
         $total_amount = $this->get_total_monetary_donations($campaign_id);
         $total_minutos = $this->get_total_minutos($campaign_id, false);
         $total_minutos_received = $this->get_total_minutos($campaign_id, true);
-        $minutos_monetary_value = $this->get_minutos_monetary_value($campaign_id, false);
+        //$minutos_monetary_value = $this->get_minutos_monetary_value($campaign_id, false);
         
         // Add Minutos monetary value to total amount
-        $total_amount += $minutos_monetary_value;
+        //$total_amount += $minutos_monetary_value;
         
         $total_donors = $wpdb->get_var(
             $wpdb->prepare(
