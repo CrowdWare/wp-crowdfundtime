@@ -201,7 +201,7 @@ class WP_CrowdFundTime_Database {
         
         return $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT * FROM {$this->donations_table} WHERE campaign_id = %d ORDER BY created_at DESC",
+                "SELECT * FROM {$this->donations_table} WHERE campaign_id = %d AND donation_type = 'time' ORDER BY created_at DESC",
                 $campaign_id
             )
         );
