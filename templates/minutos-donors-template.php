@@ -24,18 +24,18 @@ if (!isset($campaign) || !$campaign || !isset($minutos_donations)) {
     <h3><?php echo esc_html__('Minutos-Spenden', 'wp-crowdfundtime'); ?></h3>
     
     <?php if (empty($minutos_donations)) : ?>
-        <p><?php echo esc_html__('No Minutos donations yet. Be the first to donate!', 'wp-crowdfundtime'); ?></p>
+        <p><?php echo esc_html__('Noch keine Minuto-Spenden bis jetzt. Sei der Erste der Minutos spendet!', 'wp-crowdfundtime'); ?></p>
     <?php else : ?>
         <table class="wp-crowdfundtime-donors-table minutos-donors-table">
             <thead>
                 <tr>
                     <th><?php echo esc_html__('Name', 'wp-crowdfundtime'); ?></th>
                     <th><?php echo esc_html__('Minutos', 'wp-crowdfundtime'); ?></th>
-                    <th><?php echo esc_html__('Value (€)', 'wp-crowdfundtime'); ?></th>
+                    <th><?php echo esc_html__('Wert (€)', 'wp-crowdfundtime'); ?></th>
                     <th><?php echo esc_html__('Status', 'wp-crowdfundtime'); ?></th>
                     <th><?php echo esc_html__('Social Media', 'wp-crowdfundtime'); ?></th>
-                    <th><?php echo esc_html__('Other Support', 'wp-crowdfundtime'); ?></th>
-                    <th><?php echo esc_html__('Date', 'wp-crowdfundtime'); ?></th>
+                    <th><?php echo esc_html__('Anderer Support', 'wp-crowdfundtime'); ?></th>
+                    <th><?php echo esc_html__('Datum', 'wp-crowdfundtime'); ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -46,9 +46,9 @@ if (!isset($campaign) || !$campaign || !isset($minutos_donations)) {
                         <td><?php echo esc_html(number_format($donation->minutos / 2, 2)); ?> €</td>
                         <td>
                             <?php if ($donation->minutos_received) : ?>
-                                <span class="minutos-status received" title="<?php echo esc_attr__('Minutos Received', 'wp-crowdfundtime'); ?>"><?php echo esc_html__('Received', 'wp-crowdfundtime'); ?></span>
+                                <span class="minutos-status received" title="<?php echo esc_attr__('Minutos Erhalten', 'wp-crowdfundtime'); ?>"><?php echo esc_html__('Erhalten', 'wp-crowdfundtime'); ?></span>
                             <?php else : ?>
-                                <span class="minutos-status pending" title="<?php echo esc_attr__('Minutos Pending', 'wp-crowdfundtime'); ?>"><?php echo esc_html__('Pending', 'wp-crowdfundtime'); ?></span>
+                                <span class="minutos-status pending" title="<?php echo esc_attr__('Minutos Ausstehend', 'wp-crowdfundtime'); ?>"><?php echo esc_html__('Ausstehend', 'wp-crowdfundtime'); ?></span>
                             <?php endif; ?>
                         </td>
                         <td class="social-icons">

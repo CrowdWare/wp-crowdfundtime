@@ -24,16 +24,16 @@ if (!isset($campaign) || !$campaign || !isset($donations)) {
     <h3><?php echo esc_html__('Zeit-Spenden', 'wp-crowdfundtime'); ?></h3>
     
     <?php if (empty($donations)) : ?>
-        <p><?php echo esc_html__('No donations yet. Be the first to donate!', 'wp-crowdfundtime'); ?></p>
+        <p><?php echo esc_html__('Noch keine Spenden bis jetzt. Sei der Erste, der etwas spendet!', 'wp-crowdfundtime'); ?></p>
     <?php else : ?>
         <table class="wp-crowdfundtime-donors-table">
             <thead>
                 <tr>
                     <th><?php echo esc_html__('Name', 'wp-crowdfundtime'); ?></th>
-                    <th><?php echo esc_html__('Hours', 'wp-crowdfundtime'); ?></th>
+                    <th><?php echo esc_html__('Stunden', 'wp-crowdfundtime'); ?></th>
                     <th><?php echo esc_html__('Social Media', 'wp-crowdfundtime'); ?></th>
-                    <th><?php echo esc_html__('Other Support', 'wp-crowdfundtime'); ?></th>
-                    <th><?php echo esc_html__('Date', 'wp-crowdfundtime'); ?></th>
+                    <th><?php echo esc_html__('Anderer Support', 'wp-crowdfundtime'); ?></th>
+                    <th><?php echo esc_html__('Datum', 'wp-crowdfundtime'); ?></th>
                 </tr>
             </thead>
             <tbody>
