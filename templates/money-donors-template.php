@@ -24,7 +24,7 @@ if (!isset($campaign) || !$campaign || !isset($stripe_orders)) {
     <h3><?php echo esc_html__('Geld-Spenden', 'wp-crowdfundtime'); ?></h3>
     
     <?php if (empty($stripe_orders)) : ?>
-        <p><?php echo esc_html__('Kein Geld-Spenden bis jetzt. Sei der Erste, der etwas spendet!', 'wp-crowdfundtime'); ?></p>
+        <p><?php echo esc_html__('Noch keine Geld-Spenden bis jetzt. Sei der Erste, der etwas spendet!', 'wp-crowdfundtime'); ?></p>
     <?php else : ?>
         <table class="wp-crowdfundtime-donors-table money-donors-table">
             <thead>
