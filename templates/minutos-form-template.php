@@ -55,7 +55,6 @@ if (!isset($campaign) || !$campaign) {
         <div class="form-field">
             <label for="minutos"><?php echo esc_html__('Minutos', 'wp-crowdfundtime'); ?> *</label>
             <input type="number" name="minutos" id="minutos" min="15" value="15" required>
-            <!--p class="description"><?php echo esc_html__('Please send your Minutos by mail after submitting this form.', 'wp-crowdfundtime'); ?></p-->
             <p class="description">Bitte sende Deine <a target="_blank" href="https://minuto.org/de">Minutos</a> per Post nach der Übermittelung dieses Formulares.</p>
         </div>
         
@@ -63,12 +62,4 @@ if (!isset($campaign) || !$campaign) {
             <button type="submit" name="wp_crowdfundtime_submit" class="submit-button"><?php echo esc_html__('Minutos spenden', 'wp-crowdfundtime'); ?></button>
         </div>
     </form>
-    
-    <!--div class="wp-crowdfundtime-social-sharing">
-        <h4><?php echo esc_html__('Share This Campaign', 'wp-crowdfundtime'); ?></h4>
-        <div class="social-buttons">
-            <a href="#" class="social-button facebook-button" data-url="<?php echo esc_url(get_permalink()); ?>" data-title="<?php echo esc_attr($campaign->title); ?>"><?php echo esc_html__('Share on Facebook', 'wp-crowdfundtime'); ?></a>
-            <a href="#" class="social-button x-button" data-url="<?php echo esc_url(get_permalink()); ?>" data-title="<?php echo esc_attr($campaign->title); ?>"><?php echo esc_html__('Share on X', 'wp-crowdfundtime'); ?></a>
-        </div>
-    </div-->
 </div>

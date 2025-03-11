@@ -3,7 +3,7 @@
  * Plugin Name: WP CrowdFundTime
  * Plugin URI: https://example.com/wp-crowdfundtime
  * Description: A WordPress plugin for time-based crowdfunding campaigns where users can donate their time instead of money.
- * Version: 1.3.4
+ * Version: 1.3.5
  * Author: CrowdWare
  * Author URI: https://example.com
  * Text Domain: wp-crowdfundtime
@@ -18,7 +18,7 @@ if (!defined('WPINC')) {
 }
 
 // Define plugin constants
-define('WP_CROWDFUNDTIME_VERSION', '1.3.4');
+define('WP_CROWDFUNDTIME_VERSION', '1.3.5');
 define('WP_CROWDFUNDTIME_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WP_CROWDFUNDTIME_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('WP_CROWDFUNDTIME_PLUGIN_BASENAME', plugin_basename(__FILE__));

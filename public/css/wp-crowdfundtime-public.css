@@ -6,8 +6,8 @@
 /* Donation Form Styles */
 .wp-crowdfundtime-form-container {
     max-width: 600px;
-    margin: 20px 0;
-    padding: 20px;
+    margin: 10px 0;
+    padding: 15px;
     background-color: #191919;
     border-radius: 5px;
     border: 1px solid #ddd;
@@ -42,6 +42,7 @@
 .wp-crowdfundtime-form textarea {
     width: 100%;
     padding: 8px;
+    color: #000000;
     border: 1px solid #ddd;
     border-radius: 4px;
 }
@@ -83,6 +84,9 @@
     border: 1px solid #ddd;
     border-radius: 5px;
 }
+.wp-crowdfundtime-donors-container h3 {
+    padding-left: 15px;
+}
 
 .wp-crowdfundtime-donors-table {
     width: 100%;
@@ -97,7 +101,8 @@
 }
 
 .wp-crowdfundtime-donors-table th {
-    background-color: #f5f5f5;
+    color: #ffffff;
+    background-color: #4f4e4e;
     position: sticky;
     top: 0;
 }
