@@ -71,6 +71,20 @@ class WP_CrowdFundTime_Activator {
             PRIMARY KEY  (donation_id),
             KEY campaign_id (campaign_id)
         ) $charset_collate;";
+        
+        // SQL for creating interessenten table
+        $interessenten_table = $wpdb->prefix . 'crowdfundtime_interessenten';
+        $interessenten_sql = "CREATE TABLE $interessenten_table (
+            interessent_id bigint(20) NOT NULL AUTO_INCREMENT,
+            name varchar(100) NOT NULL,
+            email varchar(100) NOT NULL,
+            entwicklerhilfe tinyint(1) NOT NULL DEFAULT 0,
+            mundpropaganda tinyint(1) NOT NULL DEFAULT 0,
+            geldspende tinyint(1) NOT NULL DEFAULT 0,
+            projektfortschritt tinyint(1) NOT NULL DEFAULT 0,
+            created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY  (interessent_id)
+        ) $charset_collate;";
 
         // Include WordPress database upgrade functions
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
@@ -78,6 +92,7 @@ class WP_CrowdFundTime_Activator {
         // Create the tables
         dbDelta($campaigns_sql);
         dbDelta($donations_sql);
+        dbDelta($interessenten_sql);
 
         // Add version to options
         add_option('wp_crowdfundtime_db_version', WP_CROWDFUNDTIME_VERSION);
