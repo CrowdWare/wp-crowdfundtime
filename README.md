@@ -50,6 +50,25 @@ Use these shortcodes to display campaign elements on your pages:
 - `[crowdfundtime_donors id=X]` - Displays the donors list for campaign X
 - `[crowdfundtime_progress id=X type=hours display=bar]` - Displays the hours progress bar
 - `[crowdfundtime_progress id=X type=money display=bar]` - Displays the money progress bar
+- `[crowdfundtime_vote_form id=X]` - Displays the interest collection form for campaign X
+- `[crowdfundtime_vote_list id=X]` - Displays the list of votes for campaign X
+
+### Collecting Interest Before Crowdfunding
+
+You can now collect user interest before launching a crowdfunding campaign. This helps determine whether a project is needed by users before moving to the crowdfunding phase.
+
+Use the shortcode `[crowdfundtime_vote_form id=X]` to display the interest collection form, which includes:
+- Email field (required)
+- Checkbox for product interest
+- Dropdown list for contribution role (Developer, Marketing, Tester)
+- Free text field for additional notes
+
+Admins receive an email notification upon submission.
+
+#### Shortcodes for Interest Collection
+
+- `[crowdfundtime_vote_form id=X]` — Displays the interest collection form for campaign X
+- `[crowdfundtime_vote_list id=X]` — Displays the list of votes for campaign X
 
 ### Donation Form
 

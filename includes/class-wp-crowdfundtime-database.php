@@ -40,6 +40,15 @@ class WP_CrowdFundTime_Database {
     private $donations_table;
 
     /**
+     * The table name for votes.
+     *
+     * @since    1.0.0
+     * @access   private
+     * @var      string    $votes_table    The table name for votes.
+     */
+    private $votes_table;
+
+    /**
      * Initialize the class and set its properties.
      *
      * @since    1.0.0
@@ -48,6 +57,7 @@ class WP_CrowdFundTime_Database {
         global $wpdb;
         $this->campaigns_table = $wpdb->prefix . 'crowdfundtime_campaigns';
         $this->donations_table = $wpdb->prefix . 'crowdfundtime_donations';
+        $this->votes_table = $wpdb->prefix . 'crowdfundtime_votes';
     }
 
     /**
@@ -385,8 +395,7 @@ class WP_CrowdFundTime_Database {
         $total_amount = $this->get_total_monetary_donations($campaign_id);
         $total_minutos = $this->get_total_minutos($campaign_id, false);
         $total_minutos_received = $this->get_total_minutos($campaign_id, true);
-        //$minutos_monetary_value = $this->get_minutos_monetary_value($campaign_id, false);
-        
+         
         // Add Minutos monetary value to total amount
         //$total_amount += $minutos_monetary_value;
         

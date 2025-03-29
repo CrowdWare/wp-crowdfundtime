@@ -147,6 +147,7 @@ class WP_CrowdFundTime {
         add_shortcode('crowdfundtime_donors', array($this->public, 'shortcode_donors_list'));
         add_shortcode('crowdfundtime_progress', array($this->public, 'shortcode_progress_display'));
 
+
         // Form submission handler
         add_action('init', array($this->public, 'handle_form_submission'));
 

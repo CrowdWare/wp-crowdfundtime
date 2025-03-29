@@ -33,6 +33,7 @@ class WP_CrowdFundTime_Activator {
         // Table names
         $campaigns_table = $wpdb->prefix . 'crowdfundtime_campaigns';
         $donations_table = $wpdb->prefix . 'crowdfundtime_donations';
+        $votes_table = $wpdb->prefix . 'crowdfundtime_votes';
 
         // SQL for creating campaigns table
         $campaigns_sql = "CREATE TABLE $campaigns_table (
@@ -62,7 +63,7 @@ class WP_CrowdFundTime_Activator {
             other_support text,
             hours int(11) NOT NULL DEFAULT 1,
             
-            minutos int(11) DEFAULT 0,
+            minutos int(11) NOT NULL DEFAULT 0,
             minutos_received tinyint(1) NOT NULL DEFAULT 0,
             minutos_received_date datetime DEFAULT NULL,
             donation_type varchar(20) NOT NULL DEFAULT 'time',
@@ -72,18 +73,16 @@ class WP_CrowdFundTime_Activator {
             KEY campaign_id (campaign_id)
         ) $charset_collate;";
         
-        // SQL for creating interessenten table
-        $interessenten_table = $wpdb->prefix . 'crowdfundtime_interessenten';
-        $interessenten_sql = "CREATE TABLE $interessenten_table (
-            interessent_id bigint(20) NOT NULL AUTO_INCREMENT,
-            name varchar(100) NOT NULL,
-            email varchar(100) NOT NULL,
-            entwicklerhilfe tinyint(1) NOT NULL DEFAULT 0,
-            mundpropaganda tinyint(1) NOT NULL DEFAULT 0,
-            geldspende tinyint(1) NOT NULL DEFAULT 0,
-            projektfortschritt tinyint(1) NOT NULL DEFAULT 0,
+        $votes_sql = "CREATE TABLE $votes_table (
+            votes_id BIGINT(20) NOT NULL AUTO_INCREMENT,
+            campaign_id BIGINT(20) NOT NULL,
+            email VARCHAR(100) NOT NULL,
+            interest BOOLEAN NOT NULL,
+            contribution_role VARCHAR(50),
+            notes TEXT,
             created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY  (interessent_id)
+            PRIMARY KEY (votes_id),
+            KEY campaign_id (campaign_id)
         ) $charset_collate;";
 
         // Include WordPress database upgrade functions
@@ -92,7 +91,7 @@ class WP_CrowdFundTime_Activator {
         // Create the tables
         dbDelta($campaigns_sql);
         dbDelta($donations_sql);
-        dbDelta($interessenten_sql);
+        dbDelta($votes_sql);
 
         // Add version to options
         add_option('wp_crowdfundtime_db_version', WP_CROWDFUNDTIME_VERSION);
