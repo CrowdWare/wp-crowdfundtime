@@ -83,7 +83,7 @@ function crowdfundtime_vote_list($atts) {
     global $wpdb;
     $table_name = $wpdb->prefix . "crowdfundtime_votes";
     $results = $wpdb->get_results($wpdb->prepare(
-        "SELECT email, interest, contribution_role, notes FROM $table_name WHERE campaign_id = %d",
+        "SELECT name, email, interest, contribution_role, notes FROM $table_name WHERE campaign_id = %d",
         $campaign_id
     ));
 
@@ -95,6 +95,7 @@ function crowdfundtime_vote_list($atts) {
     <table>
         <thead>
             <tr>
+                <th>Name</th>
                 <th>Email</th>
                 <th>Interest</th>
                 <th>Role</th>
@@ -104,6 +105,7 @@ function crowdfundtime_vote_list($atts) {
         <tbody>
             <?php foreach ($results as $row): ?>
                 <tr>
+                    <td><?php echo esc_html($row->name); ?></td>
                     <td><?php echo esc_html($row->email); ?></td>
                     <td><?php echo $row->interest ? 'Yes' : 'No'; ?></td>
                     <td><?php echo esc_html($row->contribution_role); ?></td>
@@ -131,6 +133,7 @@ function crowdfundtime_vote_form($atts) {
         global $wpdb;
         $table_name = $wpdb->prefix . "crowdfundtime_votes";
 
+        $name = sanitize_text_field($_POST['name']);
         $email = sanitize_email($_POST['email']);
         $interest = isset($_POST['interest']) ? 1 : 0;
         $role = sanitize_text_field($_POST['role']);
@@ -141,6 +144,7 @@ function crowdfundtime_vote_form($atts) {
         } else {
             $wpdb->insert($table_name, [
                 'campaign_id' => $campaign_id,
+                'name' => $name,
                 'email' => $email,
                 'interest' => $interest,
                 'contribution_role' => $role,
@@ -155,38 +159,50 @@ function crowdfundtime_vote_form($atts) {
 
     ob_start(); ?>
     <div class="wp-crowdfundtime-form-container">
-    <h3><?php echo esc_html__('Werde ein Interessent', 'wp-crowdfundtime'); ?></h3>
+    <h3><?php echo esc_html__('Become an interested party', 'wp-crowdfundtime'); ?></h3>
     <div class="wp-crowdfundtime-notice-container">
         <?php
         // Display success message if set
-        if (isset($_GET['wp_crowdfundtime_interessent_success'])) {
-            echo '<div class="wp-crowdfundtime-notice success">' . esc_html__('Vielen Dank für dein Interesse!', 'wp-crowdfundtime') . '</div>';
+        if (isset($_GET['wp_crowdfundtime_vote_success'])) {
+            echo '<div class="wp-crowdfundtime-notice success">' . esc_html__('Thank you for your interest!', 'wp-crowdfundtime') . '</div>';
         }
 
         // Display error message if set
-        if (isset($_GET['wp_crowdfundtime_interessent_error'])) {
-            echo '<div class="wp-crowdfundtime-notice error">' . esc_html(urldecode($_GET['wp_crowdfundtime_interessent_error'])) . '</div>';
+        if (isset($_GET['wp_crowdfundtime_vote_error'])) {
+            echo '<div class="wp-crowdfundtime-notice error">' . esc_html(urldecode($_GET['wp_crowdfundtime_vote_error'])) . '</div>';
         }
         ?>
     </div>
-    <form method="post">
-        <label>Email:</label><br>
-        <input type="email" name="email" required><br><br>
-
+    <form class="wp-crowdfundtime-form" method="post">
+    <?php wp_nonce_field('wp_crowdfundtime_vote_form', 'wp_crowdfundtime_vote_nonce'); ?>
+    <input type="hidden" name="campaign_id" value="<?php echo esc_attr($campaign_id); ?>">
+    <div class="form-field">
+        <label>Name:</label>
+        <input type="text" name="name" required><br>
+    </div>
+    <div class="form-field">
+        <label>Email:</label>
+        <input type="email" name="email" required><br>
+    </div>
+    <div class="form-field">
         <label>Would you use this product?</label>
-        <input type="checkbox" name="interest"><br><br>
-
-        <label>How can you contribute?</label><br>
+        <input type="checkbox" name="interest"><br>
+    </div>
+    <div class="form-field">
+        <label>How can you contribute?</label>
         <select name="role">
-            <option value="Entwickler">Entwickler</option>
-            <option value="Werbung">Werbung</option>
+            <option value="Entwickler">Developer</option>
             <option value="Tester">Tester</option>
-        </select><br><br>
-
-        <label>Notes:</label><br>
-        <textarea name="notes"></textarea><br><br>
-
-        <input type="submit" name="crowdfundtime_vote_submit" value="Submit">
+            <option value="Werbung">Advertiser</option>  
+        </select><br>
+    </div>
+    <div class="form-field">
+        <label>Notes:</label>
+        <textarea name="notes"></textarea><br>
+    </div>
+    <div class="form-field">
+        <input type="submit" class="submit-button" name="crowdfundtime_vote_submit" value="Submit">
+    </div>
     </form>
 </div>
     <?php

@@ -76,6 +76,7 @@ class WP_CrowdFundTime_Activator {
         $votes_sql = "CREATE TABLE $votes_table (
             votes_id BIGINT(20) NOT NULL AUTO_INCREMENT,
             campaign_id BIGINT(20) NOT NULL,
+            name varchar(100) NOT NULL,
             email VARCHAR(100) NOT NULL,
             interest BOOLEAN NOT NULL,
             contribution_role VARCHAR(50),
