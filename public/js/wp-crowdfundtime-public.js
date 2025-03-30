@@ -102,7 +102,7 @@
 					);
 					
 					// Re-enable submit button
-					submitButton.prop('disabled', false).text('Zeit spenden');
+					submitButton.prop('disabled', false).text('Donate time');
 				}
 			});
 		});

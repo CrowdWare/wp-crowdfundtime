@@ -176,6 +176,7 @@ function crowdfundtime_vote_form($atts) {
     <form class="wp-crowdfundtime-form" method="post">
     <?php wp_nonce_field('wp_crowdfundtime_vote_form', 'wp_crowdfundtime_vote_nonce'); ?>
     <input type="hidden" name="campaign_id" value="<?php echo esc_attr($campaign_id); ?>">
+    <input type="hidden" name="donation_type" value="vote">
     <div class="form-field">
         <label>Name:</label>
         <input type="text" name="name" required><br>
