@@ -3,7 +3,7 @@
  * Plugin Name: WP CrowdFundTime
  * Plugin URI: https://example.com/wp-crowdfundtime
  * Description: A WordPress plugin for time-based crowdfunding campaigns where users can donate their time instead of money.
- * Version: 1.4.39
+ * Version: 1.4.44
  * Author: CrowdWare
  * Author URI: https://example.com
  * Text Domain: wp-crowdfundtime
@@ -18,7 +18,7 @@ if (!defined('WPINC')) {
 }
 
 // Define plugin constants
-define('WP_CROWDFUNDTIME_VERSION', '1.4.39');
+define('WP_CROWDFUNDTIME_VERSION', '1.4.44');
 define('WP_CROWDFUNDTIME_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WP_CROWDFUNDTIME_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('WP_CROWDFUNDTIME_PLUGIN_BASENAME', plugin_basename(__FILE__));
@@ -176,8 +176,7 @@ function handle_crowdfundtime_vote_submission() {
             'email' => $email,
             'interest' => $interest,
             'contribution_role' => $role,
-            'notes' => $notes,
-            'woocommerce_order_id' => 0
+            'notes' => $notes
         ]);
 
         if ($inserted === false) {
@@ -325,20 +324,40 @@ function crowdfundtime_vote_form($atts) {
         }
         ?>
     </div>
-    // Get the WooCommerce product ID
-    $product_id = get_post_meta($campaign_id, '_woocommerce_product_id', true);
-
-    if (!$product_id) {
-        return "<p style='color:red;'>WooCommerce product not found for this campaign.</p>";
-    }
-
-    // Get the product URL
-    $product_url = get_permalink($product_id);
-
-    ?>
-    <p>
-        <a href="<?php echo esc_url($product_url); ?>" class="button"><?php echo esc_html__('Donate', 'wp-crowdfundtime'); ?></a>
-    </p>
+    <form class="wp-crowdfundtime-form" method="post" action=""> <?php // Post to the current URL ?>
+    <?php wp_nonce_field('wp_crowdfundtime_vote_form', 'wp_crowdfundtime_vote_nonce'); ?>
+    <input type="hidden" name="campaign_id" value="<?php echo esc_attr($campaign_id); ?>">
+    <input type="hidden" name="donation_type" value="vote">
+    <?php // Add hidden field for the current URL ?>
+    <input type="hidden" name="_wp_http_referer" value="<?php echo esc_url(wp_unslash($_SERVER['REQUEST_URI'])); ?>">
+    <div class="form-field">
+        <label>Name:</label>
+        <input type="text" name="name" required><br>
+    </div>
+    <div class="form-field">
+        <label>Email:</label>
+        <input type="email" name="email" required><br>
+    </div>
+    <div class="form-field">
+        <label>Would you use this product?</label>
+        <input type="checkbox" name="interest"><br>
+    </div>
+    <div class="form-field">
+        <label>How can you contribute?</label>
+        <select name="role">
+            <option value="Entwickler">Developer</option>
+            <option value="Tester">Tester</option>
+            <option value="Werbung">Advertiser</option>  
+        </select><br>
+    </div>
+    <div class="form-field">
+        <label>Notes:</label>
+        <textarea name="notes"></textarea><br>
+    </div>
+    <div class="form-field">
+        <input type="submit" class="submit-button" name="crowdfundtime_vote_submit" value="Submit">
+    </div>
+    </form>
 </div>
     <?php
     return ob_get_clean();
