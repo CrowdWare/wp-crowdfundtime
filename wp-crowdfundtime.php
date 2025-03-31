@@ -3,7 +3,7 @@
  * Plugin Name: WP CrowdFundTime
  * Plugin URI: https://example.com/wp-crowdfundtime
  * Description: A WordPress plugin for time-based crowdfunding campaigns where users can donate their time instead of money.
- * Version: 1.4.44
+ * Version: 1.4.46
  * Author: CrowdWare
  * Author URI: https://example.com
  * Text Domain: wp-crowdfundtime
@@ -18,7 +18,7 @@ if (!defined('WPINC')) {
 }
 
 // Define plugin constants
-define('WP_CROWDFUNDTIME_VERSION', '1.4.44');
+define('WP_CROWDFUNDTIME_VERSION', '1.4.46');
 define('WP_CROWDFUNDTIME_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WP_CROWDFUNDTIME_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('WP_CROWDFUNDTIME_PLUGIN_BASENAME', plugin_basename(__FILE__));
@@ -224,17 +224,15 @@ function crowdfundtime_vote_list($atts) {
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Email</th>
                 <th>Interest</th>
                 <th>Role</th>
-                <th>Notes</th>
+                <th>Feature Requests</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($results as $row): ?>
                 <tr>
                     <td><?php echo esc_html($row->name); ?></td>
-                    <td><?php echo esc_html($row->email); ?></td>
                     <td><?php echo $row->interest ? 'Yes' : 'No'; ?></td>
                     <td><?php echo esc_html($row->contribution_role); ?></td>
                     <td><?php echo esc_html($row->notes); ?></td>
@@ -351,7 +349,7 @@ function crowdfundtime_vote_form($atts) {
         </select><br>
     </div>
     <div class="form-field">
-        <label>Notes:</label>
+        <label>Feature Requests:</label>
         <textarea name="notes"></textarea><br>
     </div>
     <div class="form-field">
