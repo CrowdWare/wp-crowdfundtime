@@ -232,9 +232,9 @@ function crowdfundtime_vote_list($atts) {
         <tbody>
             <?php foreach ($results as $row): ?>
                 <tr>
-                    <td><?php echo esc_html($row->name); ?></td>
-                    <td><?php echo $row->interest ? 'Yes' : 'No'; ?></td>
-                    <td><?php echo esc_html($row->contribution_role); ?></td>
+                    <td style="min-width: 200px;"><?php echo esc_html($row->name); ?></td>
+                    <td style="min-width: 100px;"><?php echo $row->interest ? 'Yes' : 'No'; ?></td>
+                    <td style="min-width: 150px;"><?php echo esc_html($row->contribution_role); ?></td>
                     <td><?php echo esc_html($row->notes); ?></td>
                 </tr>
             <?php endforeach; ?>
