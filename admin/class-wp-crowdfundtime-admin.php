@@ -252,6 +252,9 @@ class WP_CrowdFundTime_Admin {
         if (!empty($stripe_product_ids)) {
             update_post_meta($campaign_id, 'stripe_product_ids', $stripe_product_ids);
         }
+
+        // Create WooCommerce product
+        create_woocommerce_product($campaign_id, $title, $description);
         
         wp_send_json_success(array(
             'message' => __('Campaign created successfully.', 'wp-crowdfundtime'),

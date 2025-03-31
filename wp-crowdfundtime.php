@@ -3,7 +3,7 @@
  * Plugin Name: WP CrowdFundTime
  * Plugin URI: https://example.com/wp-crowdfundtime
  * Description: A WordPress plugin for time-based crowdfunding campaigns where users can donate their time instead of money.
- * Version: 1.4.37
+ * Version: 1.4.39
  * Author: CrowdWare
  * Author URI: https://example.com
  * Text Domain: wp-crowdfundtime
@@ -18,20 +18,11 @@ if (!defined('WPINC')) {
 }
 
 // Define plugin constants
-define('WP_CROWDFUNDTIME_VERSION', '1.4.37');
+define('WP_CROWDFUNDTIME_VERSION', '1.4.39');
 define('WP_CROWDFUNDTIME_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WP_CROWDFUNDTIME_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('WP_CROWDFUNDTIME_PLUGIN_BASENAME', plugin_basename(__FILE__));
 
-// Check if Stripe Payments plugin is active and include necessary files
-if (!class_exists('ASPMain') && file_exists(WP_CROWDFUNDTIME_PLUGIN_DIR . 'stripe-payments/accept-stripe-payments.php')) {
-    // Define ASPMain class and products_slug if not already defined
-    if (!class_exists('ASPMain')) {
-        class ASPMain {
-            public static $products_slug = 'asp-products';
-        }
-    }
-}
 
 /**
  * The code that runs during plugin activation.
@@ -72,6 +63,42 @@ add_shortcode('crowdfundtime_votes_count', 'crowdfundtime_votes_count');
 // Hook the vote form submission handler to init
 add_action('init', 'handle_crowdfundtime_vote_submission');
 run_wp_crowdfundtime();
+
+/**
+ * Creates a WooCommerce product for a campaign.
+ *
+ * @param int $campaign_id The ID of the campaign.
+ * @param string $title The title of the campaign.
+ * @param string $description The description of the campaign.
+ */
+function create_woocommerce_product($campaign_id, $title, $description) {
+    // Check if WooCommerce is active
+    if (!class_exists('WooCommerce')) {
+        return;
+    }
+
+    // Check if the product already exists
+    $product_id = get_post_meta($campaign_id, '_woocommerce_product_id', true);
+    if ($product_id) {
+        return;
+    }
+
+    // Create the product
+    $product = new WC_Product_Simple();
+    $product->set_name($title);
+    $product->set_description($description);
+    $product->set_status('publish');
+    $product->set_catalog_visibility('hidden');
+    $product->set_price(1); // Set a default price of 1
+    $product->set_regular_price(1);
+    $product->set_sold_individually('yes');
+
+    // Save the product
+    $product_id = $product->save();
+
+    // Update the campaign meta with the product ID
+    update_post_meta($campaign_id, '_woocommerce_product_id', $product_id);
+}
 
 
 /**
@@ -143,14 +170,14 @@ function handle_crowdfundtime_vote_submission() {
         wp_redirect(add_query_arg('wp_crowdfundtime_vote_error', urlencode('Please enter a valid email.'), $redirect_url));
         exit;
     } else {
-        $inserted = $wpdb->insert($table_name, [
+   $inserted = $wpdb->insert($table_name, [
             'campaign_id' => $campaign_id,
             'name' => $name,
             'email' => $email,
             'interest' => $interest,
             'contribution_role' => $role,
-            'notes' => $notes
-            // Removed 'submission_date' => current_time('mysql', 1) as the column doesn't exist
+            'notes' => $notes,
+            'woocommerce_order_id' => 0
         ]);
 
         if ($inserted === false) {
@@ -158,7 +185,7 @@ function handle_crowdfundtime_vote_submission() {
             wp_redirect(add_query_arg('wp_crowdfundtime_vote_error', urlencode('Database error. Could not save submission.'), $redirect_url));
             exit;
         } else {
-            // Send email notification
+   // Send email notification
             wp_mail(get_option('admin_email'), 'New Vote Received', "A new vote has been submitted for campaign ID $campaign_id.\n\nName: $name\nEmail: $email\nInterest: $interest\nRole: $role\nNotes: $notes");
 
             // Redirect back with success message (wp_redirect handles sanitization)
@@ -298,40 +325,20 @@ function crowdfundtime_vote_form($atts) {
         }
         ?>
     </div>
-    <form class="wp-crowdfundtime-form" method="post" action=""> <?php // Post to the current URL ?>
-    <?php wp_nonce_field('wp_crowdfundtime_vote_form', 'wp_crowdfundtime_vote_nonce'); ?>
-    <input type="hidden" name="campaign_id" value="<?php echo esc_attr($campaign_id); ?>">
-    <input type="hidden" name="donation_type" value="vote">
-    <?php // Add hidden field for the current URL ?>
-    <input type="hidden" name="_wp_http_referer" value="<?php echo esc_url(wp_unslash($_SERVER['REQUEST_URI'])); ?>">
-    <div class="form-field">
-        <label>Name:</label>
-        <input type="text" name="name" required><br>
-    </div>
-    <div class="form-field">
-        <label>Email:</label>
-        <input type="email" name="email" required><br>
-    </div>
-    <div class="form-field">
-        <label>Would you use this product?</label>
-        <input type="checkbox" name="interest"><br>
-    </div>
-    <div class="form-field">
-        <label>How can you contribute?</label>
-        <select name="role">
-            <option value="Entwickler">Developer</option>
-            <option value="Tester">Tester</option>
-            <option value="Werbung">Advertiser</option>  
-        </select><br>
-    </div>
-    <div class="form-field">
-        <label>Notes:</label>
-        <textarea name="notes"></textarea><br>
-    </div>
-    <div class="form-field">
-        <input type="submit" class="submit-button" name="crowdfundtime_vote_submit" value="Submit">
-    </div>
-    </form>
+    // Get the WooCommerce product ID
+    $product_id = get_post_meta($campaign_id, '_woocommerce_product_id', true);
+
+    if (!$product_id) {
+        return "<p style='color:red;'>WooCommerce product not found for this campaign.</p>";
+    }
+
+    // Get the product URL
+    $product_url = get_permalink($product_id);
+
+    ?>
+    <p>
+        <a href="<?php echo esc_url($product_url); ?>" class="button"><?php echo esc_html__('Donate', 'wp-crowdfundtime'); ?></a>
+    </p>
 </div>
     <?php
     return ob_get_clean();

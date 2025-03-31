@@ -68,6 +68,7 @@ class WP_CrowdFundTime_Activator {
             minutos_received tinyint(1) NOT NULL DEFAULT 0,
             minutos_received_date datetime DEFAULT NULL,
             donation_type varchar(20) NOT NULL DEFAULT 'time',
+            woocommerce_order_id bigint(20) DEFAULT NULL,
             
             created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY  (donation_id),
