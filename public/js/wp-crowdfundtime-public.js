@@ -7,19 +7,30 @@
 	 */
 
 	$(document).ready(function() {
-		
-		// Donation form submission via AJAX
+
+		// Form submission handler
 		$('.wp-crowdfundtime-form').on('submit', function(e) {
-			e.preventDefault();
-			
 			var form = $(this);
-			var submitButton = form.find('button[type="submit"]');
+			var donation_type = form.find('input[name="donation_type"]').val();
+
+			// --- Check if this is the vote form ---
+			// If it's the vote form, allow the default PHP submission to handle it.
+			if (donation_type === 'vote') {
+				// Do not prevent default and do not proceed with AJAX.
+				// The PHP code in crowdfundtime_vote_form will handle this.
+				return true;
+			}
+
+			// --- If it's NOT the vote form, proceed with AJAX submission ---
+			e.preventDefault(); // Prevent default only for non-vote forms
+
+			var submitButton = form.find('input[type="submit"], button[type="submit"]'); // Find both input and button submit types
 			var formData = form.serialize();
-			var noticeContainer = form.siblings('.wp-crowdfundtime-notice-container');
-			
+			var noticeContainer = form.closest('.wp-crowdfundtime-form-container').find('.wp-crowdfundtime-notice-container'); // Find notice container relative to parent container
+
 			// Validate form
 			var isValid = true;
-			var donation_type = form.find('input[name="donation_type"]').val();
+			// donation_type is already defined above
 			var name = form.find('input[name="name"]').val();
 			var email = form.find('input[name="email"]').val();
 			var hours = parseInt(form.find('input[name="hours"]').val(), 10);
@@ -93,7 +104,7 @@
 					}
 					
 					// Re-enable submit button
-					submitButton.prop('disabled', false).text('Zeit spenden');
+					submitButton.prop('disabled', false).text('Donate time');
 				},
 				error: function() {
 					// Show error message
@@ -102,7 +113,19 @@
 					);
 					
 					// Re-enable submit button
-					submitButton.prop('disabled', false).text('Donate time');
+					// Reset button text based on donation type (or use a generic text)
+					var originalButtonText = donation_type === 'hours' ? 'Donate time' : (donation_type === 'minutos' ? 'Donate Minutos' : 'Submit'); // Adjust as needed
+					submitButton.prop('disabled', false).val(originalButtonText); // Use .val() for input type=submit
+				},
+				error: function() {
+					// Show error message
+					noticeContainer.html(
+						'<div class="wp-crowdfundtime-notice error">An error occurred. Please try again.</div>'
+					);
+
+					// Re-enable submit button
+					var originalButtonText = donation_type === 'hours' ? 'Donate time' : (donation_type === 'minutos' ? 'Donate Minutos' : 'Submit'); // Adjust as needed
+					submitButton.prop('disabled', false).val(originalButtonText); // Use .val() for input type=submit
 				}
 			});
 		});
