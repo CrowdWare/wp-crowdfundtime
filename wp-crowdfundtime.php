@@ -3,7 +3,7 @@
  * Plugin Name: WP CrowdFundTime
  * Plugin URI: https://example.com/wp-crowdfundtime
  * Description: A WordPress plugin for time-based crowdfunding campaigns where users can donate their time instead of money.
- * Version: 1.4.19
+ * Version: 1.4.26
  * Author: CrowdWare
  * Author URI: https://example.com
  * Text Domain: wp-crowdfundtime
@@ -18,7 +18,7 @@ if (!defined('WPINC')) {
 }
 
 // Define plugin constants
-define('WP_CROWDFUNDTIME_VERSION', '1.4.19');
+define('WP_CROWDFUNDTIME_VERSION', '1.4.26');
 define('WP_CROWDFUNDTIME_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WP_CROWDFUNDTIME_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('WP_CROWDFUNDTIME_PLUGIN_BASENAME', plugin_basename(__FILE__));
@@ -57,6 +57,7 @@ register_deactivation_hook(__FILE__, 'deactivate_wp_crowdfundtime');
  * admin-specific hooks, and public-facing site hooks.
  */
 require_once WP_CROWDFUNDTIME_PLUGIN_DIR . 'includes/class-wp-crowdfundtime.php';
+require_once WP_CROWDFUNDTIME_PLUGIN_DIR . 'includes/class-wp-crowdfundtime-updater.php';
 
 /**
  * Begins execution of the plugin.
@@ -190,7 +191,9 @@ function crowdfundtime_vote_list($atts) {
     }
 
     ob_start(); ?>
-    <table>
+    <div class="wp-crowdfundtime-votes-container" data-campaign-id="<?php echo esc_attr($campaign_id); ?>"> <?php // Add a container div like the donors list ?>
+    <h3><?php echo esc_html__('Interested Parties', 'wp-crowdfundtime'); ?></h3> <?php // Add a heading ?>
+    <table class="wp-crowdfundtime-donors-table"> <?php // Add the CSS class here ?>
         <thead>
             <tr>
                 <th>Name</th>
@@ -212,6 +215,7 @@ function crowdfundtime_vote_list($atts) {
             <?php endforeach; ?>
         </tbody>
     </table>
+    </div> <?php // Close the container div ?>
     <?php
     return ob_get_clean();
 }

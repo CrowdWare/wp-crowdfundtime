@@ -85,27 +85,31 @@ class WP_CrowdFundTime {
      * @since    1.0.0
      * @access   private
      */
-    private function load_dependencies() {
-        // Include the database class
-        require_once WP_CROWDFUNDTIME_PLUGIN_DIR . 'includes/class-wp-crowdfundtime-database.php';
-        $this->db = new WP_CrowdFundTime_Database();
+private function load_dependencies() {
+    // Include the database class
+    require_once WP_CROWDFUNDTIME_PLUGIN_DIR . 'includes/class-wp-crowdfundtime-database.php';
+    $this->db = new WP_CrowdFundTime_Database();
 
-        // Include the campaign class
-        require_once WP_CROWDFUNDTIME_PLUGIN_DIR . 'includes/class-wp-crowdfundtime-campaign.php';
-        $this->campaign = new WP_CrowdFundTime_Campaign($this->db);
+    // Include the campaign class
+    require_once WP_CROWDFUNDTIME_PLUGIN_DIR . 'includes/class-wp-crowdfundtime-campaign.php';
+    $this->campaign = new WP_CrowdFundTime_Campaign($this->db);
 
-        // Include the donation class
-        require_once WP_CROWDFUNDTIME_PLUGIN_DIR . 'includes/class-wp-crowdfundtime-donation.php';
-        $this->donation = new WP_CrowdFundTime_Donation($this->db);
+    // Include the donation class
+    require_once WP_CROWDFUNDTIME_PLUGIN_DIR . 'includes/class-wp-crowdfundtime-donation.php';
+    $this->donation = new WP_CrowdFundTime_Donation($this->db);
 
-        // Include the admin class
-        require_once WP_CROWDFUNDTIME_PLUGIN_DIR . 'admin/class-wp-crowdfundtime-admin.php';
-        $this->admin = new WP_CrowdFundTime_Admin($this->db, $this->campaign, $this->donation);
+    // Include the admin class
+    require_once WP_CROWDFUNDTIME_PLUGIN_DIR . 'admin/class-wp-crowdfundtime-admin.php';
+    $this->admin = new WP_CrowdFundTime_Admin($this->db, $this->campaign, $this->donation);
 
-        // Include the public class
-        require_once WP_CROWDFUNDTIME_PLUGIN_DIR . 'public/class-wp-crowdfundtime-public.php';
-        $this->public = new WP_CrowdFundTime_Public($this->db, $this->campaign, $this->donation);
-    }
+    // Include the public class
+    require_once WP_CROWDFUNDTIME_PLUGIN_DIR . 'public/class-wp-crowdfundtime-public.php';
+    $this->public = new WP_CrowdFundTime_Public($this->db, $this->campaign, $this->donation);
+
+    // Include the updater class
+    require_once WP_CROWDFUNDTIME_PLUGIN_DIR . 'includes/class-wp-crowdfundtime-updater.php';
+    $this->updater = new WP_CrowdFundTime_Updater();
+}
 
     /**
      * Register all of the hooks related to the admin area functionality
@@ -161,7 +165,8 @@ class WP_CrowdFundTime {
      *
      * @since    1.0.0
      */
-    public function run() {
+    public function run() { 
+
         // The plugin is now running
     }
 }

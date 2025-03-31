@@ -65,11 +65,6 @@ Use the shortcode `[crowdfundtime_vote_form id=X]` to display the interest colle
 
 Admins receive an email notification upon submission.
 
-#### Shortcodes for Interest Collection
-
-- `[crowdfundtime_vote_form id=X]` — Displays the interest collection form for campaign X
-- `[crowdfundtime_vote_list id=X]` — Displays the list of votes for campaign X
-
 ### Donation Form
 
 The donation form includes:

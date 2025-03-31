@@ -34,7 +34,9 @@ if (!defined('WPINC')) {
                     <th><?php echo esc_html__('Hours Goal', 'wp-crowdfundtime'); ?></th>
                     <th><?php echo esc_html__('Hours Donated', 'wp-crowdfundtime'); ?></th>
                     <th><?php echo esc_html__('Minutos Goal', 'wp-crowdfundtime'); ?></th>
+<th><?php echo esc_html__('Votes Goal', 'wp-crowdfundtime'); ?></th>
                     <th><?php echo esc_html__('Minutos Donated', 'wp-crowdfundtime'); ?></th>
+<th><?php echo esc_html__('Votes Donated', 'wp-crowdfundtime'); ?></th>
                     <th><?php echo esc_html__('Money Goal', 'wp-crowdfundtime'); ?></th>
                     <th><?php echo esc_html__('Money Donated', 'wp-crowdfundtime'); ?></th>
                     <th><?php echo esc_html__('Page', 'wp-crowdfundtime'); ?></th>
@@ -53,13 +55,21 @@ if (!defined('WPINC')) {
                         <td><?php echo esc_html($campaign->goal_hours); ?></td>
                         <td><?php echo esc_html($stats['total_hours']); ?> (<?php echo esc_html(round($stats['hours_percentage'], 1)); ?>%)</td>
                         <td><?php echo esc_html(isset($campaign->goal_minutos) ? $campaign->goal_minutos : 0); ?></td>
-                        <td><?php 
-                            $minutos_stats = $this->campaign->get_minutos_stats($campaign->campaign_id);
-                            echo esc_html($minutos_stats['total_minutos']); 
-                            if (isset($campaign->goal_minutos) && $campaign->goal_minutos > 0) {
-                                echo ' (' . esc_html(round($minutos_stats['minutos_percentage'], 1)) . '%)';
-                            }
-                        ?></td>
+<td><?php echo esc_html(isset($campaign->goal_votes) ? $campaign->goal_votes : 0); ?></td>
+<td><?php 
+    $minutos_stats = $this->campaign->get_minutos_stats($campaign->campaign_id);
+    echo esc_html($minutos_stats['total_minutos']); 
+    if (isset($campaign->goal_minutos) && $campaign->goal_minutos > 0) {
+        echo ' (' . esc_html(round($minutos_stats['minutos_percentage'], 1)) . '%)';
+    }
+?></td>
+<td><?php 
+    $votes_stats = $this->campaign->get_votes_stats($campaign->campaign_id);
+    echo esc_html($votes_stats['total_votes']); 
+    if (isset($campaign->goal_votes) && $campaign->goal_votes > 0) {
+        echo ' (' . esc_html(round($votes_stats['votes_percentage'], 1)) . '%)';
+    }
+?></td>
                         <td><?php echo esc_html(number_format($campaign->goal_amount, 2)); ?> €</td>
                         <td><?php echo esc_html(number_format($stats['total_amount'], 2)); ?> € (<?php echo esc_html(round($stats['amount_percentage'], 1)); ?>%)</td>
                         <td><?php echo esc_html($page_title); ?></td>

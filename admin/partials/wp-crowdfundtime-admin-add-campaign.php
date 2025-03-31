@@ -22,6 +22,7 @@ $description = $is_edit ? $campaign->description : '';
 $goal_hours = $is_edit ? $campaign->goal_hours : 0;
 $goal_amount = $is_edit ? $campaign->goal_amount : 0.00;
 $goal_minutos = $is_edit && isset($campaign->goal_minutos) ? $campaign->goal_minutos : 0;
+$goal_votes = $is_edit && isset($campaign->goal_votes) ? $campaign->goal_votes : 0; // Define goal_votes variable
 $start_date = $is_edit && $campaign->start_date ? date('Y-m-d', strtotime($campaign->start_date)) : '';
 $end_date = $is_edit && $campaign->end_date ? date('Y-m-d', strtotime($campaign->end_date)) : '';
 $page_id = $is_edit ? $campaign->page_id : 0;
@@ -64,6 +65,11 @@ $pages = get_pages();
         <div class="form-field">
             <label for="goal_minutos"><?php echo esc_html__('Minutos Goal', 'wp-crowdfundtime'); ?></label>
             <input type="number" name="goal_minutos" id="goal_minutos" min="0" value="<?php echo esc_attr($goal_minutos); ?>">
+        </div>
+
+        <div class="form-field">
+            <label for="goal_votes"><?php echo esc_html__('Votes Goal', 'wp-crowdfundtime'); ?></label>
+            <input type="number" name="goal_votes" id="goal_votes" min="0" value="<?php echo esc_attr($goal_votes); ?>">
         </div>
         
         <div class="form-field">

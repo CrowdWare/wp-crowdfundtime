@@ -286,6 +286,7 @@ class WP_CrowdFundTime_Admin {
         $goal_hours = isset($_POST['goal_hours']) ? intval($_POST['goal_hours']) : 0;
         $goal_amount = isset($_POST['goal_amount']) ? floatval($_POST['goal_amount']) : 0.00;
         $goal_minutos = isset($_POST['goal_minutos']) ? intval($_POST['goal_minutos']) : 0;
+$goal_votes = isset($_POST['goal_votes']) ? intval($_POST['goal_votes']) : 0;
         $start_date = isset($_POST['start_date']) ? sanitize_text_field($_POST['start_date']) : '';
         $end_date = isset($_POST['end_date']) ? sanitize_text_field($_POST['end_date']) : '';
         $page_id = isset($_POST['page_id']) ? intval($_POST['page_id']) : 0;
@@ -302,6 +303,7 @@ class WP_CrowdFundTime_Admin {
             'goal_hours' => $goal_hours,
             'goal_amount' => $goal_amount,
             'goal_minutos' => $goal_minutos,
+'goal_votes' => $goal_votes,
             'start_date' => empty($start_date) ? null : $start_date,
             'end_date' => empty($end_date) ? null : $end_date,
             'page_id' => $page_id > 0 ? $page_id : null,

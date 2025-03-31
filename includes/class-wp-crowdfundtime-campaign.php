@@ -62,9 +62,12 @@ class WP_CrowdFundTime_Campaign {
             $campaign_data['goal_amount'] = 0.00;
         }
         
-        if (!isset($campaign_data['goal_minutos'])) {
-            $campaign_data['goal_minutos'] = 0;
-        }
+if (!isset($campaign_data['goal_minutos'])) {
+    $campaign_data['goal_minutos'] = 0;
+}
+if (!isset($campaign_data['goal_votes'])) {
+    $campaign_data['goal_votes'] = 0;
+}
         
         return $this->db->create_campaign($campaign_data);
     }
@@ -79,9 +82,12 @@ class WP_CrowdFundTime_Campaign {
      */
     public function update_campaign($campaign_id, $campaign_data) {
         // Validate campaign ID
-        if (empty($campaign_id)) {
-            return false;
-        }
+if (empty($campaign_id)) {
+    return false;
+}
+if (!isset($campaign_data['goal_votes'])) {
+    $campaign_data['goal_votes'] = 0;
+}
         
         return $this->db->update_campaign($campaign_id, $campaign_data);
     }
@@ -291,6 +297,28 @@ class WP_CrowdFundTime_Campaign {
             $html .= '</div>';
             
             return $html;
+        } elseif ($type === 'votes') {
+            $stats = $this->get_votes_stats($campaign_id);
+            $percentage = $stats['votes_percentage'];
+            $class = 'votes-progress';
+            
+            $html = '<div class="wp-crowdfundtime-progress-container">';
+            $html .= '<div class="wp-crowdfundtime-progress-bar ' . esc_attr($class) . '">';
+            $html .= '<div class="wp-crowdfundtime-progress-fill" style="width: ' . esc_attr($percentage) . '%"></div>';
+            $html .= '</div>';
+            
+            $html .= '<div class="wp-crowdfundtime-progress-text">';
+            $html .= esc_html(sprintf(
+                '%d Votes von %d (%.1f%%)',
+                $stats['total_votes'],
+                $stats['goal_votes'],
+                $percentage
+            ));
+            $html .= '</div>';
+            
+            $html .= '</div>';
+            
+            return $html;
         } else {
             $stats = $this->get_donation_stats($campaign_id);
             $percentage = $stats['amount_percentage'];
@@ -314,5 +342,37 @@ class WP_CrowdFundTime_Campaign {
             
             return $html;
         }
+    }
+
+    /**
+     * Get Votes statistics for a campaign.
+     *
+     * @since    1.0.0
+     * @param    int      $campaign_id    The campaign ID.
+     * @return   array                    The Votes statistics.
+     */
+    public function get_votes_stats($campaign_id) {
+        $campaign = $this->db->get_campaign($campaign_id);
+        if (!$campaign) {
+            return array(
+                'total_votes' => 0,
+                'goal_votes' => 0,
+                'votes_percentage' => 0,
+            );
+        }
+        
+        $total_votes = $this->db->get_total_votes($campaign_id);
+        
+        // Calculate percentage based on goal_votes if available
+        $votes_percentage = 0;
+        if (isset($campaign->goal_votes) && $campaign->goal_votes > 0) {
+            $votes_percentage = ($total_votes / $campaign->goal_votes) * 100;
+        }
+        
+        return array(
+            'total_votes' => $total_votes,
+            'goal_votes' => isset($campaign->goal_votes) ? $campaign->goal_votes : 0,
+            'votes_percentage' => min(100, $votes_percentage),
+        );
     }
 }

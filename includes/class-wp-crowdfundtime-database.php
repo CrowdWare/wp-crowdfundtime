@@ -70,10 +70,13 @@ class WP_CrowdFundTime_Database {
     public function create_campaign($campaign_data) {
         global $wpdb;
         
-        $result = $wpdb->insert(
-            $this->campaigns_table,
-            $campaign_data
-        );
+$result = $wpdb->insert(
+    $this->campaigns_table,
+    array_merge(
+        $campaign_data,
+        array('goal_votes' => isset($campaign_data['goal_votes']) ? $campaign_data['goal_votes'] : 0)
+    )
+);
         
         if ($result) {
             return $wpdb->insert_id;
@@ -93,11 +96,14 @@ class WP_CrowdFundTime_Database {
     public function update_campaign($campaign_id, $campaign_data) {
         global $wpdb;
         
-        $result = $wpdb->update(
-            $this->campaigns_table,
-            $campaign_data,
-            array('campaign_id' => $campaign_id)
-        );
+$result = $wpdb->update(
+    $this->campaigns_table,
+    array_merge(
+        $campaign_data,
+        array('goal_votes' => isset($campaign_data['goal_votes']) ? $campaign_data['goal_votes'] : 0)
+    ),
+    array('campaign_id' => $campaign_id)
+);
         
         return $result !== false;
     }
@@ -436,6 +442,24 @@ class WP_CrowdFundTime_Database {
             'total_minutos' => $total_minutos,
             'total_minutos_received' => $total_minutos_received,
             'minutos_monetary_value' => $minutos_monetary_value,
+        );
+    }
+
+    /**
+     * Get total votes for a campaign.
+     *
+     * @since    1.0.0
+     * @param    int      $campaign_id    The campaign ID.
+     * @return   int                      The total votes.
+     */
+    public function get_total_votes($campaign_id) {
+        global $wpdb;
+        
+        return (int) $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT COUNT(*) FROM {$this->votes_table} WHERE campaign_id = %d",
+                $campaign_id
+            )
         );
     }
 }
