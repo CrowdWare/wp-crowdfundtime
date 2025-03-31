@@ -3,7 +3,7 @@
  * Plugin Name: WP CrowdFundTime
  * Plugin URI: https://example.com/wp-crowdfundtime
  * Description: A WordPress plugin for time-based crowdfunding campaigns where users can donate their time instead of money.
- * Version: 1.4.26
+ * Version: 1.4.37
  * Author: CrowdWare
  * Author URI: https://example.com
  * Text Domain: wp-crowdfundtime
@@ -18,7 +18,7 @@ if (!defined('WPINC')) {
 }
 
 // Define plugin constants
-define('WP_CROWDFUNDTIME_VERSION', '1.4.26');
+define('WP_CROWDFUNDTIME_VERSION', '1.4.37');
 define('WP_CROWDFUNDTIME_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WP_CROWDFUNDTIME_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('WP_CROWDFUNDTIME_PLUGIN_BASENAME', plugin_basename(__FILE__));
@@ -68,6 +68,7 @@ function run_wp_crowdfundtime() {
 }
 add_shortcode('crowdfundtime_vote_form', 'crowdfundtime_vote_form');
 add_shortcode('crowdfundtime_vote_list', 'crowdfundtime_vote_list');
+add_shortcode('crowdfundtime_votes_count', 'crowdfundtime_votes_count');
 // Hook the vote form submission handler to init
 add_action('init', 'handle_crowdfundtime_vote_submission');
 run_wp_crowdfundtime();
@@ -218,6 +219,53 @@ function crowdfundtime_vote_list($atts) {
     </div> <?php // Close the container div ?>
     <?php
     return ob_get_clean();
+}
+
+/**
+ * Displays the number of votes for a campaign.
+ */
+function crowdfundtime_votes_count($atts) {
+    $atts = shortcode_atts(array('id' => 0, 'display' => 'text'), $atts);
+    $campaign_id = intval($atts['id']);
+	 // Output the campaign ID for debugging
+    echo "<!-- Campaign ID: " . esc_html($campaign_id) . " -->";
+    $display = sanitize_text_field($atts['display']);
+
+    if (!$campaign_id) {
+        return "<p style='color:red;'>Campaign ID is required.</p>";
+    }
+
+    global $wpdb;
+    $table_name = $wpdb->prefix . "crowdfundtime_votes";
+    $campaigns_table_name = $wpdb->prefix . "crowdfundtime_campaigns";
+
+
+   // Get the goal_votes from the campaigns table
+    $goal = $wpdb->get_var($wpdb->prepare(
+        "SELECT goal_votes FROM  $campaigns_table_name WHERE campaign_id = %d",
+        $campaign_id
+    ));
+
+	 // If goal_votes is not set or is empty, default to 100
+    if (empty($goal)) {
+        $goal = 100;
+    }
+
+    // Output the goal value for debugging
+    echo "<!-- Goal Votes: " . esc_html($goal) . " -->";
+
+    $count = $wpdb->get_var($wpdb->prepare(
+        "SELECT COUNT(*) FROM $table_name WHERE campaign_id = %d",
+        $campaign_id
+    ));
+
+    if ($display == 'bar') {
+        $percent = ($count / $goal) * 100;
+        $percent = min($percent, 100); // Cap at 100%
+        return '<div class="wp-crowdfundtime-progress-bar"><div class="wp-crowdfundtime-progress-bar-inner" style="width: ' . $percent . '%;"></div><div class="wp-crowdfundtime-progress-bar-text">' . round($percent, 2) . '%</div></div>';
+    } else {
+        return "<p>Votes: " . esc_html($count) . "</p>";
+    }
 }
 
 /**
